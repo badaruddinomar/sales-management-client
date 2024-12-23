@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${inter.variable} ${sfPro.variable} antialiased`}
+        className={`${inter.variable} ${sfPro.variable} antialiased bg-[#E8e8e8]`}
         suppressHydrationWarning
       >
         <ReduxProvider> {children}</ReduxProvider>

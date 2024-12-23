@@ -15,6 +15,14 @@ const config: Config = {
     },
     extend: {
       colors: {
+        //
+        "dark-primary": "#212529",
+        "gray-primary": "#6c757d",
+        "gray-secondary": "#ced4da",
+        "gray-tertiary": "#e1e1e1",
+        placeholder: "#CED4DA",
+        "blue-primary": "#007AFF",
+        //
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         card: {

@@ -18,6 +18,7 @@ import { FiEyeOff } from "react-icons/fi";
 import { GoEye } from "react-icons/go";
 import { CiLock } from "react-icons/ci";
 import { useState } from "react";
+import Link from "next/link";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
@@ -119,6 +120,15 @@ const Login = () => {
               </Button>
             </form>
           </Form>
+          <p className="font-primary text-sm font-semibold text-gray-primary">
+            Don’t have an account?{" "}
+            <Link
+              href={"/signup"}
+              className="text-dark-primary hover:opacity-[.7] transition-all duration-300"
+            >
+              Sign Up
+            </Link>
+          </p>
         </div>
         {/* right area-- */}
         <div className="w-1/2 hidden sm:block h-full">

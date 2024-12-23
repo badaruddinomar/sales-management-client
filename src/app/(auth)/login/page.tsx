@@ -17,8 +17,10 @@ import { CiMail } from "react-icons/ci";
 import { FiEyeOff } from "react-icons/fi";
 import { GoEye } from "react-icons/go";
 import { CiLock } from "react-icons/ci";
+import { useState } from "react";
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,6 +31,8 @@ const Login = () => {
   function onSubmit(values: z.infer<typeof loginSchema>) {
     console.log(values);
   }
+  const togglePassword = () => setShowPassword(!showPassword);
+
   return (
     <div className="w-full px-3">
       {/* container-- */}
@@ -85,10 +89,21 @@ const Login = () => {
                         <CiLock className="text-2xl text-purple-500" />
                         <Input
                           placeholder="Password"
+                          type={showPassword ? "text" : "password"}
                           {...field}
                           className="outline-none border-none placeholder:text-placeholder focus-visible:ring-0 font-secondary text-base shadow-none"
                         />
-                        <GoEye className="text-2xl text-purple-500 cursor-pointer transition-all duration-300 hover:opacity-[.7]" />
+                        {!showPassword ? (
+                          <GoEye
+                            onClick={togglePassword}
+                            className="text-2xl text-purple-500 cursor-pointer transition-all duration-300 hover:opacity-[.7]"
+                          />
+                        ) : (
+                          <FiEyeOff
+                            onClick={togglePassword}
+                            className="text-2xl text-purple-500 cursor-pointer transition-all duration-300 hover:opacity-[.7]"
+                          />
+                        )}
                       </div>
                     </FormControl>
                     <FormMessage className="font-primary" />
@@ -97,7 +112,8 @@ const Login = () => {
               />
               <Button
                 type="submit"
-                className="font-semibold text-base font-secondary py-4 text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
+                size={null}
+                className="font-semibold text-base font-secondary py-3 text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
               >
                 Submit
               </Button>

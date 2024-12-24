@@ -20,9 +20,16 @@ import { RxAvatar } from "react-icons/rx";
 import { useState } from "react";
 import Link from "next/link";
 import { signupSchema } from "@/zodSchema/signupSchema";
+import { useUserSignupMutation } from "@/redux/apiClient/userApi";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { IApiError } from "@/types";
+import LoadingSpinner from "@/components/reusable/LoadingSpinner";
 
 const Signup = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [signupHandler, { isLoading }] = useUserSignupMutation();
+  const router = useRouter();
   const form = useForm<z.infer<typeof signupSchema>>({
     resolver: zodResolver(signupSchema),
     defaultValues: {
@@ -31,8 +38,19 @@ const Signup = () => {
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof signupSchema>) {
-    console.log(values);
+  async function onSubmit(formData: z.infer<typeof signupSchema>) {
+    try {
+      await signupHandler(formData).unwrap();
+      router.push("/login");
+      const successMessage =
+        "Registration successful. Please wait for approval.";
+      toast.success(successMessage);
+      form.reset();
+    } catch (err: unknown) {
+      const error = err as IApiError;
+      const errorMessage = error?.data?.message || "Something went wrong.";
+      toast.error(errorMessage);
+    }
   }
   const togglePassword = () => setShowPassword(!showPassword);
 
@@ -146,14 +164,24 @@ const Signup = () => {
               <Button
                 type="submit"
                 size={null}
+                disabled={isLoading}
                 className="font-semibold text-base font-secondary py-3 text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
               >
-                Submit
+                {isLoading ? (
+                  <LoadingSpinner
+                    size={25}
+                    color="#ffffff"
+                    borderWidth="2px"
+                    height="100%"
+                  />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </form>
           </Form>
           <p className="font-primary text-sm font-semibold text-gray-primary">
-            Don’t have an account?{" "}
+            Already have an account?{" "}
             <Link
               href={"/login"}
               className="text-dark-primary hover:opacity-[.7] transition-all duration-300"

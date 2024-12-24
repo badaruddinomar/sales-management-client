@@ -3,6 +3,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/ReduxProvider";
 import { Inter } from "next/font/google";
 import localFont from "next/font/local";
+import { Toaster } from "sonner";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -51,7 +52,10 @@ export default function RootLayout({
         className={`${inter.variable} ${sfPro.variable} antialiased bg-[#E8e8e8]`}
         suppressHydrationWarning
       >
-        <ReduxProvider> {children}</ReduxProvider>
+        <ReduxProvider>
+          <Toaster position="bottom-right" richColors />
+          {children}
+        </ReduxProvider>
       </body>
     </html>
   );

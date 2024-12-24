@@ -5,6 +5,7 @@ import { PersistConfig, persistReducer, persistStore } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
 import { productApi } from "./apiClient/productApi";
 import userReducer from "./reducer/userReducer";
+import { userApi } from "./apiClient/userApi";
 
 // Create a no-op storage for non-browser environments
 const createNoopStorage = () => {
@@ -30,6 +31,7 @@ const storage =
 const rootReducer = combineReducers({
   userReducer,
   [productApi.reducerPath]: productApi.reducer,
+  [userApi.reducerPath]: userApi.reducer,
 });
 
 // Define the persist config type
@@ -46,7 +48,8 @@ const store = configureStore({
   reducer: persistedReducer,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
-      productApi.middleware
+      productApi.middleware,
+      userApi.middleware
     ),
 });
 

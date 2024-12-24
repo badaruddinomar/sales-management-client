@@ -1,13 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { IUser } from "@/types";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface IInitialState {
   isAuthenticated: boolean | null;
-  accessToken: string | null;
-  user: null;
+  user: IUser | null;
 }
 const initialState: IInitialState = {
   isAuthenticated: false,
-  accessToken: "",
   user: null,
 };
 
@@ -15,6 +14,10 @@ const userReducer = createSlice({
   name: "user",
   initialState,
   reducers: {
+    addUserToStore: (state, action: PayloadAction<IUser>) => {
+      state.user = action.payload;
+      state.isAuthenticated = true;
+    },
     removeUserFromStore: (state) => {
       state.user = null;
       state.isAuthenticated = false;
@@ -22,6 +25,6 @@ const userReducer = createSlice({
   },
 });
 
-export const { removeUserFromStore } = userReducer.actions;
+export const { addUserToStore, removeUserFromStore } = userReducer.actions;
 
 export default userReducer.reducer;

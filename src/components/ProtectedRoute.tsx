@@ -16,7 +16,10 @@ const ProtectedRoute = <P extends object>(
       }
 
       const userRole = user?.role?.toLowerCase();
-
+      // Check if the user's email is verified--
+      if (user.isVerified === false) {
+        redirect("/resend-verify-code");
+      }
       // Check if the user's role is allowed to access the route
       if (!allowedRoles.includes(userRole)) {
         redirect("/login");

@@ -136,6 +136,7 @@ const Login = () => {
                   </FormItem>
                 )}
               />
+
               <Button
                 type="submit"
                 size={null}
@@ -164,6 +165,18 @@ const Login = () => {
               Sign Up
             </Link>
           </p>
+          <Link
+            href={"/forgot-password"}
+            className="flex justify-center my-2 items-center"
+          >
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              className="font-secondary"
+            >
+              Forgot Password?
+            </Button>
+          </Link>
         </div>
         {/* right area-- */}
         <div className="w-1/2 hidden sm:block h-full">

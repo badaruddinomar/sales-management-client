@@ -41,7 +41,7 @@ const Signup = () => {
   async function onSubmit(formData: z.infer<typeof signupSchema>) {
     try {
       await signupHandler(formData).unwrap();
-      router.push("/login");
+      router.push("/verify-email");
       const successMessage = "Registration successful.";
       toast.success(successMessage);
       form.reset();

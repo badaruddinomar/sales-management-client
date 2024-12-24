@@ -26,7 +26,21 @@ export const userApi = createApi({
         body: JSON.stringify(bodyData),
       }),
     }),
+    verifyEmail: builder.mutation({
+      query: (bodyData) => ({
+        url: "/auth/verify-email",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      }),
+    }),
   }),
 });
 
-export const { useUserSignupMutation, useUserLoginMutation } = userApi;
+export const {
+  useUserSignupMutation,
+  useUserLoginMutation,
+  useVerifyEmailMutation,
+} = userApi;

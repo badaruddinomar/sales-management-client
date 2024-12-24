@@ -45,7 +45,6 @@ const Login = () => {
     try {
       const data = await loginHandler(formData).unwrap();
       router.push("/");
-      console.log(data);
       dispatch(addUserToStore(data?.data));
       const successMessage = "Login successful.";
       toast.success(successMessage);

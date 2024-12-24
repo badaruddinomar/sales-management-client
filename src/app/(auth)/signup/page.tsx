@@ -42,8 +42,7 @@ const Signup = () => {
     try {
       await signupHandler(formData).unwrap();
       router.push("/login");
-      const successMessage =
-        "Registration successful. Please wait for approval.";
+      const successMessage = "Registration successful.";
       toast.success(successMessage);
       form.reset();
     } catch (err: unknown) {

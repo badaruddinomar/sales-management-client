@@ -19,9 +19,18 @@ import { GoEye } from "react-icons/go";
 import { CiLock } from "react-icons/ci";
 import { useState } from "react";
 import Link from "next/link";
+import LoadingSpinner from "@/components/reusable/LoadingSpinner";
+import { useUserLoginMutation } from "@/redux/apiClient/userApi";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { IApiError } from "@/types";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+  const togglePassword = () => setShowPassword(!showPassword);
+  const [loginHandler, { isLoading }] = useUserLoginMutation();
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -29,10 +38,19 @@ const Login = () => {
       password: "",
     },
   });
-  function onSubmit(values: z.infer<typeof loginSchema>) {
-    console.log(values);
+  async function onSubmit(formData: z.infer<typeof loginSchema>) {
+    try {
+      await loginHandler(formData).unwrap();
+      router.push("/");
+      const successMessage = "Login successful.";
+      toast.success(successMessage);
+      form.reset();
+    } catch (err: unknown) {
+      const error = err as IApiError;
+      const errorMessage = error?.data?.message || "Something went wrong.";
+      toast.error(errorMessage);
+    }
   }
-  const togglePassword = () => setShowPassword(!showPassword);
 
   return (
     <div className="w-full px-3">
@@ -114,9 +132,19 @@ const Login = () => {
               <Button
                 type="submit"
                 size={null}
+                disabled={isLoading}
                 className="font-semibold text-base font-secondary py-3 text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
               >
-                Submit
+                {isLoading ? (
+                  <LoadingSpinner
+                    size={25}
+                    color="#ffffff"
+                    borderWidth="2px"
+                    height="100%"
+                  />
+                ) : (
+                  "Submit"
+                )}
               </Button>
             </form>
           </Form>

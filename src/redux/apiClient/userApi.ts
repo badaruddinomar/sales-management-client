@@ -56,6 +56,16 @@ export const userApi = createApi({
         body: JSON.stringify(bodyData),
       }),
     }),
+    resendVerifyCode: builder.mutation({
+      query: (bodyData) => ({
+        url: `/auth/resend-verify-code`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      }),
+    }),
   }),
 });
 
@@ -65,4 +75,5 @@ export const {
   useVerifyEmailMutation,
   useForgotPasswordMutation,
   useResetPasswordMutation,
+  useResendVerifyCodeMutation,
 } = userApi;

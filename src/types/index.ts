@@ -3,6 +3,7 @@ export interface IUser {
   name: string;
   email: string;
   role: string;
+  isVerified: boolean;
   createdAt: string;
 }
 export interface IApiError {

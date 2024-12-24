@@ -24,12 +24,15 @@ import { useUserLoginMutation } from "@/redux/apiClient/userApi";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { IApiError } from "@/types";
+import { useAppDispatch } from "@/redux/hooks";
+import { addUserToStore } from "@/redux/reducer/userReducer";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const togglePassword = () => setShowPassword(!showPassword);
   const [loginHandler, { isLoading }] = useUserLoginMutation();
   const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -40,8 +43,10 @@ const Login = () => {
   });
   async function onSubmit(formData: z.infer<typeof loginSchema>) {
     try {
-      await loginHandler(formData).unwrap();
+      const data = await loginHandler(formData).unwrap();
       router.push("/");
+      console.log(data);
+      dispatch(addUserToStore(data?.data));
       const successMessage = "Login successful.";
       toast.success(successMessage);
       form.reset();
@@ -65,6 +70,7 @@ const Login = () => {
               width={0}
               height={0}
               sizes="100vw"
+              priority
               className="w-full h-full object-cover"
             />
           </div>
@@ -89,6 +95,7 @@ const Login = () => {
                         <CiMail className="text-2xl text-purple-500" />
                         <Input
                           placeholder="Your email"
+                          type="email"
                           {...field}
                           className="outline-none border-none placeholder:text-placeholder focus-visible:ring-0 font-secondary text-base shadow-none"
                         />
@@ -108,6 +115,7 @@ const Login = () => {
                         <CiLock className="text-2xl text-purple-500" />
                         <Input
                           placeholder="Password"
+                          autoComplete="on"
                           type={showPassword ? "text" : "password"}
                           {...field}
                           className="outline-none border-none placeholder:text-placeholder focus-visible:ring-0 font-secondary text-base shadow-none"

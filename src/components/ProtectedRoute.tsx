@@ -1,36 +1,30 @@
 "use client";
-import { useLayoutEffect, ComponentType } from "react";
-import { redirect } from "next/navigation";
-import { useAppSelector } from "@/redux/hooks";
+import { useLayoutEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useGetUserQuery } from "@/redux/apiClient/userApi";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks";
+import { removeUserFromStore } from "@/redux/reducer/userReducer";
 
-const ProtectedRoute = <P extends object>(
-  Component: ComponentType,
-  allowedRoles: string[] = []
-) => {
-  return function Route(props: P) {
-    const { user } = useAppSelector((state) => state.userReducer);
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
+  const { isError } = useGetUserQuery({});
+  const { user } = useAppSelector((state) => state.userReducer);
+  const dispatch = useAppDispatch();
 
-    useLayoutEffect(() => {
-      if (!user) {
-        redirect("/login");
-      }
-
-      const userRole = user?.role?.toLowerCase();
-      // Check if the user's email is verified--
-      if (user.isVerified === false) {
-        redirect("/resend-verify-code");
-      }
-      // Check if the user's role is allowed to access the route
-      if (!allowedRoles.includes(userRole)) {
-        redirect("/login");
-      }
-    }, [user]);
-
-    if (!user || !allowedRoles.includes(user?.role?.toLowerCase())) {
-      return null;
+  useLayoutEffect(() => {
+    if (!user || isError) {
+      router.push("/login");
+      dispatch(removeUserFromStore());
+    } else {
+      if (user.isVerified === false) router.push("/resend-verify-code");
     }
+  }, [user, router, isError, dispatch]);
 
-    return <Component {...props} />;
-  };
+  if (!user) {
+    return null;
+  }
+
+  return children;
 };
+
 export default ProtectedRoute;

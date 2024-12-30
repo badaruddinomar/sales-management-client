@@ -56,6 +56,7 @@ export const userApi = createApi({
         body: JSON.stringify(bodyData),
       }),
     }),
+
     resendVerifyCode: builder.mutation({
       query: (bodyData) => ({
         url: `/auth/resend-verify-code`,
@@ -64,6 +65,12 @@ export const userApi = createApi({
           "Content-Type": "application/json",
         },
         body: JSON.stringify(bodyData),
+      }),
+    }),
+    getUser: builder.query({
+      query: () => ({
+        url: `/users/profile`,
+        method: "GET",
       }),
     }),
     logout: builder.mutation({
@@ -86,4 +93,5 @@ export const {
   useResetPasswordMutation,
   useResendVerifyCodeMutation,
   useLogoutMutation,
+  useGetUserQuery,
 } = userApi;

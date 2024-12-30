@@ -3,6 +3,7 @@ import config from "@/config";
 
 export const baseQuery = fetchBaseQuery({
   baseUrl: `${config.serverUrl}`,
+  credentials: "include",
   prepareHeaders: (headers) => {
     // const state = getState() as RootState;
     // const accessToken = state?.userReducer?.accessToken;
@@ -10,6 +11,7 @@ export const baseQuery = fetchBaseQuery({
     //   headers.set("Authorization", `${accessToken}`);
     // }
     headers.set("Content-Type", "application/json");
+
     return headers;
   },
   // paramsSerializer: (params) => new URLSearchParams(params).toString(),

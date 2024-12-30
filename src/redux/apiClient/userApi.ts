@@ -66,6 +66,15 @@ export const userApi = createApi({
         body: JSON.stringify(bodyData),
       }),
     }),
+    logout: builder.mutation({
+      query: () => ({
+        url: `/auth/logout`,
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+    }),
   }),
 });
 
@@ -76,4 +85,5 @@ export const {
   useForgotPasswordMutation,
   useResetPasswordMutation,
   useResendVerifyCodeMutation,
+  useLogoutMutation,
 } = userApi;

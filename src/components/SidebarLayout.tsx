@@ -16,7 +16,7 @@ export default function SidebarLayout({
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset>
+      <SidebarInset className="w-full">
         <header
           className="flex px-4 h-16 shrink-0 items-center justify-between gap-2 transition-[width,height] ease-linear 
          group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12  bg-[#FAFAFA]"
@@ -30,7 +30,7 @@ export default function SidebarLayout({
             </p>
           </div>
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">{children}</div>
+        <div className="flex flex-1  flex-col gap-4 p-4 pt-0">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

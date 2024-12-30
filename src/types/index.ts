@@ -1,3 +1,5 @@
+import { IconType } from "react-icons/lib";
+
 export interface IUser {
   _id: string;
   name: string;
@@ -12,4 +14,11 @@ export interface IApiError {
     message: string;
     [key: string]: unknown;
   };
+}
+
+export interface IStats {
+  title: string;
+  value: number;
+  icon: IconType;
+  percentage: number;
 }

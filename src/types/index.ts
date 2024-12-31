@@ -22,3 +22,25 @@ export interface IStats {
   icon: IconType;
   percentage: number;
 }
+
+export interface IUnit {
+  _id: string;
+  name: string;
+  createdAt: string;
+}
+export interface ICategory {
+  _id: string;
+  name: string;
+  createdAt: string;
+}
+export interface IProduct {
+  _id: string;
+  name: string;
+  purchasePrice: number;
+  salePrice: number;
+  quantity: number;
+  stock: string;
+  unit: IUnit;
+  category: ICategory;
+  createdAt: string;
+}

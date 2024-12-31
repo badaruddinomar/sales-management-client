@@ -1,5 +1,5 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
-import SidebarLayout from "@/components/SidebarLayout";
+import SidebarLayout from "@/components/sidebar/SidebarLayout";
 const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <ProtectedRoute>

@@ -3,9 +3,11 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/query";
 import { PersistConfig, persistReducer, persistStore } from "redux-persist";
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
-import { productApi } from "./apiClient/productApi";
 import userReducer from "./reducer/userReducer";
 import { userApi } from "./apiClient/userApi";
+import { categoryApi } from "./apiClient/categoryApi";
+import { unitApi } from "./apiClient/unitApi";
+import { productApi } from "./apiClient/productApi";
 
 // Create a no-op storage for non-browser environments
 const createNoopStorage = () => {
@@ -32,6 +34,8 @@ const rootReducer = combineReducers({
   userReducer,
   [productApi.reducerPath]: productApi.reducer,
   [userApi.reducerPath]: userApi.reducer,
+  [categoryApi.reducerPath]: categoryApi.reducer,
+  [unitApi.reducerPath]: unitApi.reducer,
 });
 
 // Define the persist config type
@@ -49,7 +53,9 @@ const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }).concat(
       productApi.middleware,
-      userApi.middleware
+      userApi.middleware,
+      categoryApi.middleware,
+      unitApi.middleware
     ),
 });
 

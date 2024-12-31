@@ -12,11 +12,11 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
 
   useLayoutEffect(() => {
-    if (!user || isError) {
+    if (!user && isError) {
       router.push("/login");
       dispatch(removeUserFromStore());
     } else {
-      if (user.isVerified === false) router.push("/resend-verify-code");
+      if (user?.isVerified === false) router.push("/resend-verify-code");
     }
   }, [user, router, isError, dispatch]);
 

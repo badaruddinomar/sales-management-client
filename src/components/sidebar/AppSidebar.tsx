@@ -18,7 +18,7 @@ import { useAppDispatch } from "@/redux/hooks";
 import { removeUserFromStore } from "@/redux/reducer/userReducer";
 import { toast } from "sonner";
 import { IApiError } from "@/types";
-import LoadingSpinner from "./reusable/LoadingSpinner";
+import LoadingSpinner from "../reusable/LoadingSpinner";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { open: isSidebarOpen } = useSidebar();

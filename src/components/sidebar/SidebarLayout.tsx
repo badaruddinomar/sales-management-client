@@ -1,5 +1,5 @@
 "use client";
-import { AppSidebar } from "@/components/AppSidebar";
+import { AppSidebar } from "@/components/sidebar/AppSidebar";
 import {
   SidebarInset,
   SidebarProvider,

@@ -7,21 +7,29 @@ import NoItemFound from "@/components/reusable/NoItemFound";
 import ProductTable from "@/components/product/ProductTable";
 import PaginatedItems from "@/components/reusable/PaginatedItem";
 import AddProductDrawer from "@/components/product/AddProductDrawer";
+import EditProductDrawer from "@/components/product/EditProductDrawer";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [selectedProductId, setSelectedProductId] = useState<string>("");
   const { data: products, isLoading } = useGetProductsQuery({
     searchTerm,
     page: currentPage,
     limit: 9,
   });
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
-  const hideAddDrawerHandler = () => {
-    setAddDrawerOpen(false);
-  };
+  const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
+  // handler--
+  const hideAddDrawerHandler = () => setAddDrawerOpen(false);
+  const hideEditDrawerHandler = () => setEditDrawerOpen(false);
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
+  };
+  const handleSelectedProductId = (id: string) => {
+    setSelectedProductId(id);
+    setEditDrawerOpen(true);
   };
 
   const showPagination =
@@ -67,7 +75,10 @@ const ProductsPage = () => {
               height="50vh"
             />
           ) : (
-            <ProductTable products={products?.data} />
+            <ProductTable
+              products={products?.data}
+              productIdHandler={handleSelectedProductId}
+            />
           )}
         </>
       )}
@@ -82,6 +93,12 @@ const ProductsPage = () => {
       <AddProductDrawer
         isDrawerOpen={addDrawerOpen}
         hideDrawerHandler={hideAddDrawerHandler}
+      />
+      {/* edit product drawer */}
+      <EditProductDrawer
+        isDrawerOpen={editDrawerOpen}
+        hideDrawerHandler={hideEditDrawerHandler}
+        productId={selectedProductId}
       />
     </div>
   );

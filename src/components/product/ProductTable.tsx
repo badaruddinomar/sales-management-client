@@ -11,7 +11,14 @@ import { IProduct } from "@/types";
 import { PiTrash } from "react-icons/pi";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 
-const ProductTable = ({ products }: { products: IProduct[] }) => {
+interface IProps {
+  products: IProduct[];
+  productIdHandler: (id: string) => void;
+}
+const ProductTable = ({ products, productIdHandler }: IProps) => {
+  const selectProductIdHandler = (id: string) => {
+    productIdHandler(id);
+  };
   const tableHeading = [
     "Name",
     "Qty",
@@ -68,7 +75,10 @@ const ProductTable = ({ products }: { products: IProduct[] }) => {
                   {product?.category?.name}
                 </TableCell>
                 <TableCell className="py-3 flex items-center space-x-2">
-                  <button className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2">
+                  <button
+                    onClick={() => selectProductIdHandler(product?._id)}
+                    className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"
+                  >
                     <MdOutlineModeEditOutline />
                   </button>
                   <button className="bg-red-100 text-red-500 hover:bg-red-200 transition-all duration-300 py-1 rounded-md px-2">

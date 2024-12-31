@@ -40,6 +40,24 @@ export const productApi = createApi({
       }),
       invalidatesTags: ["Product"],
     }),
+    editProduct: builder.mutation({
+      query: ({ bodyData, productId }) => ({
+        url: `/products/update/${productId}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    deleteProduct: builder.mutation({
+      query: ({ productId }) => ({
+        url: `/products/delete/${productId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Product"],
+    }),
   }),
 });
 
@@ -47,4 +65,6 @@ export const {
   useGetProductsQuery,
   useGetProductQuery,
   useAddProductMutation,
+  useEditProductMutation,
+  useDeleteProductMutation,
 } = productApi;

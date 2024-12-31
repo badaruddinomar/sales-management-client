@@ -8,6 +8,7 @@ import ProductTable from "@/components/product/ProductTable";
 import PaginatedItems from "@/components/reusable/PaginatedItem";
 import AddProductDrawer from "@/components/product/AddProductDrawer";
 import EditProductDrawer from "@/components/product/EditProductDrawer";
+import DeleteProductDialog from "@/components/product/DeleteProductDialog";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -20,16 +21,22 @@ const ProductsPage = () => {
   });
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   // handler--
   const hideAddDrawerHandler = () => setAddDrawerOpen(false);
   const hideEditDrawerHandler = () => setEditDrawerOpen(false);
+  const hideDeleteDialogHandler = () => setDeleteDialogOpen(false);
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const handleSelectedProductId = (id: string) => {
+  const editProductIdHandler = (id: string) => {
     setSelectedProductId(id);
     setEditDrawerOpen(true);
+  };
+  const deleteProductIdHandler = (id: string) => {
+    setSelectedProductId(id);
+    setDeleteDialogOpen(true);
   };
 
   const showPagination =
@@ -77,7 +84,8 @@ const ProductsPage = () => {
           ) : (
             <ProductTable
               products={products?.data}
-              productIdHandler={handleSelectedProductId}
+              editProductIdHandler={editProductIdHandler}
+              deleteProductIdHandler={deleteProductIdHandler}
             />
           )}
         </>
@@ -99,6 +107,13 @@ const ProductsPage = () => {
         isDrawerOpen={editDrawerOpen}
         hideDrawerHandler={hideEditDrawerHandler}
         productId={selectedProductId}
+      />
+      {/* delete product dialog-- */}
+      <DeleteProductDialog
+        hideDialogHandler={hideDeleteDialogHandler}
+        isDialogOpen={deleteDialogOpen}
+        productId={selectedProductId}
+        description="This action cannot be undone. This will permanently delete the product and remove its data from our servers."
       />
     </div>
   );

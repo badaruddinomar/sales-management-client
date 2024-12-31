@@ -13,11 +13,19 @@ import { MdOutlineModeEditOutline } from "react-icons/md";
 
 interface IProps {
   products: IProduct[];
-  productIdHandler: (id: string) => void;
+  editProductIdHandler: (id: string) => void;
+  deleteProductIdHandler: (id: string) => void;
 }
-const ProductTable = ({ products, productIdHandler }: IProps) => {
-  const selectProductIdHandler = (id: string) => {
-    productIdHandler(id);
+const ProductTable = ({
+  products,
+  editProductIdHandler,
+  deleteProductIdHandler,
+}: IProps) => {
+  const editProductIdChangeHandler = (id: string) => {
+    editProductIdHandler(id);
+  };
+  const deleteProductIdChangeHandler = (id: string) => {
+    deleteProductIdHandler(id);
   };
   const tableHeading = [
     "Name",
@@ -76,12 +84,15 @@ const ProductTable = ({ products, productIdHandler }: IProps) => {
                 </TableCell>
                 <TableCell className="py-3 flex items-center space-x-2">
                   <button
-                    onClick={() => selectProductIdHandler(product?._id)}
+                    onClick={() => editProductIdChangeHandler(product?._id)}
                     className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"
                   >
                     <MdOutlineModeEditOutline />
                   </button>
-                  <button className="bg-red-100 text-red-500 hover:bg-red-200 transition-all duration-300 py-1 rounded-md px-2">
+                  <button
+                    onClick={() => deleteProductIdChangeHandler(product?._id)}
+                    className="bg-red-100 text-red-500 hover:bg-red-200 transition-all duration-300 py-1 rounded-md px-2"
+                  >
                     <PiTrash />
                   </button>
                 </TableCell>

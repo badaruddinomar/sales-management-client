@@ -82,13 +82,13 @@ const EditProductDrawer = ({
   useEffect(() => {
     if (product?.data) {
       form.reset({
-        name: product.data.name,
-        purchasePrice: product.data.purchasePrice,
-        salePrice: product.data.salePrice,
-        quantity: product.data.quantity,
-        stock: product.data.stock,
-        unit: product.data.unit._id,
-        category: product.data.category._id,
+        name: product?.data?.name,
+        purchasePrice: product?.data?.purchasePrice,
+        salePrice: product?.data?.salePrice,
+        quantity: product?.data?.quantity,
+        stock: product?.data?.stock,
+        unit: product?.data?.unit?._id,
+        category: product?.data?.category?._id,
       });
     }
   }, [form, product?.data]);

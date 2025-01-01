@@ -22,8 +22,8 @@ export const unitApi = createApi({
       providesTags: ["Unit"],
     }),
     getUnit: builder.query({
-      query: ({ categoryId }) => ({
-        url: `/units/single/${categoryId}`,
+      query: ({ unitId }) => ({
+        url: `/units/single/${unitId}`,
         method: "GET",
       }),
       providesTags: ["Unit"],
@@ -39,8 +39,31 @@ export const unitApi = createApi({
       }),
       invalidatesTags: ["Unit"],
     }),
+    editUnit: builder.mutation({
+      query: ({ bodyData, unitId }) => ({
+        url: `/units/update/${unitId}`,
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(bodyData),
+      }),
+      invalidatesTags: ["Unit"],
+    }),
+    deleteUnit: builder.mutation({
+      query: (unitId) => ({
+        url: `/units/delete/${unitId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Unit"],
+    }),
   }),
 });
 
-export const { useGetUnitsQuery, useGetUnitQuery, useAddUnitMutation } =
-  unitApi;
+export const {
+  useGetUnitsQuery,
+  useGetUnitQuery,
+  useAddUnitMutation,
+  useEditUnitMutation,
+  useDeleteUnitMutation,
+} = unitApi;

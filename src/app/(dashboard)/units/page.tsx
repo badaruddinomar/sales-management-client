@@ -4,6 +4,7 @@ import LoadingSpinner from "@/components/reusable/LoadingSpinner";
 import NoItemFound from "@/components/reusable/NoItemFound";
 import PaginatedItems from "@/components/reusable/PaginatedItem";
 import AddUnitDialog from "@/components/unit/AddUnitDialog";
+import DeleteUnitDialog from "@/components/unit/DeleteUnitDialog";
 import EditUnitDialog from "@/components/unit/EditUnitDialog";
 import UnitTable from "@/components/unit/UnitTable";
 import { useGetUnitsQuery } from "@/redux/apiClient/unitApi";
@@ -21,16 +22,18 @@ const UnitsPage = () => {
   });
   const [addDialogOpen, setAddDialogOpen] = useState<boolean>(false);
   const [editDialogOpen, setEditDialogOpen] = useState<boolean>(false);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   // handler--
   const hideAddDialogHandler = () => setAddDialogOpen(false);
   const hideEditDialogHandler = () => setEditDialogOpen(false);
+  const hideDeleteDialogHandler = () => setDeleteDialogOpen(false);
   const editUnitIdHandler = (id: string) => {
     setSelectedUnitId(id);
     setEditDialogOpen(true);
   };
   const deleteUnitIdHandler = (id: string) => {
     setSelectedUnitId(id);
-    // setEditDialogOpen(true);
+    setDeleteDialogOpen(true);
   };
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -104,6 +107,12 @@ const UnitsPage = () => {
         unitId={selectedUnitId}
       />
       {/* delete unit dialog-- */}
+      <DeleteUnitDialog
+        isDialogOpen={deleteDialogOpen}
+        unitId={selectedUnitId}
+        hideDialogHandler={hideDeleteDialogHandler}
+        description="This action will permanently delete the unit and also related to its products."
+      />
     </div>
   );
 };

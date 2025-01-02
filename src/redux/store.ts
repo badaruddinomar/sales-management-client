@@ -8,6 +8,7 @@ import { userApi } from "./apiClient/userApi";
 import { categoryApi } from "./apiClient/categoryApi";
 import { unitApi } from "./apiClient/unitApi";
 import { productApi } from "./apiClient/productApi";
+import { saleApi } from "./apiClient/salesApi";
 
 // Create a no-op storage for non-browser environments
 const createNoopStorage = () => {
@@ -36,6 +37,7 @@ const rootReducer = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
   [categoryApi.reducerPath]: categoryApi.reducer,
   [unitApi.reducerPath]: unitApi.reducer,
+  [saleApi.reducerPath]: saleApi.reducer,
 });
 
 // Define the persist config type
@@ -55,7 +57,8 @@ const store = configureStore({
       productApi.middleware,
       userApi.middleware,
       categoryApi.middleware,
-      unitApi.middleware
+      unitApi.middleware,
+      saleApi.middleware
     ),
 });
 

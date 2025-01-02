@@ -12,3 +12,13 @@ export const checkNumber = (number: number) => {
 export const formatedNumber = (number: number) => {
   return numbro(number).format({ thousandSeparated: true });
 };
+import { format, parseISO } from "date-fns";
+
+export function formatDate(isoDateString: string) {
+  if (isoDateString) {
+    const parsedDate = parseISO(isoDateString);
+    return format(parsedDate, "dd-MM-yyyy");
+  } else {
+    return null;
+  }
+}

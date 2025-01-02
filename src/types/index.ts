@@ -44,3 +44,19 @@ export interface IProduct {
   category: ICategory;
   createdAt: string;
 }
+export interface ISale {
+  _id: string;
+  customerName: string;
+  customerPhone: string;
+  products: {
+    product: string;
+    quantity: number;
+    unit: string;
+    salePrice: number;
+  }[];
+  totalAmount: number;
+  paymentMethod: string;
+  saleDate: string;
+  createdBy: string;
+  createdAt: string;
+}

@@ -14,29 +14,33 @@ const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedProductId, setSelectedProductId] = useState<string>("");
+
+  // API data fetching
   const { data: products, isLoading } = useGetProductsQuery({
     searchTerm,
     page: currentPage,
     limit: 9,
   });
+
+  // Drawer and Dialog states
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
-  // handler--
-  const hideAddDrawerHandler = () => setAddDrawerOpen(false);
-  const hideEditDrawerHandler = () => setEditDrawerOpen(false);
-  const hideDeleteDialogHandler = () => setDeleteDialogOpen(false);
 
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
+  // Handler functions
+  const toggleDrawer = (type: "add" | "edit", state: boolean) => {
+    if (type === "add") setAddDrawerOpen(state);
+    if (type === "edit") setEditDrawerOpen(state);
   };
-  const editProductIdHandler = (id: string) => {
+
+  const toggleDeleteDialog = (state: boolean) => setDeleteDialogOpen(state);
+
+  const handlePageChange = (page: number) => setCurrentPage(page);
+
+  const handleProductAction = (action: "edit" | "delete", id: string) => {
     setSelectedProductId(id);
-    setEditDrawerOpen(true);
-  };
-  const deleteProductIdHandler = (id: string) => {
-    setSelectedProductId(id);
-    setDeleteDialogOpen(true);
+    if (action === "edit") setEditDrawerOpen(true);
+    if (action === "delete") setDeleteDialogOpen(true);
   };
 
   const showPagination =
@@ -44,7 +48,7 @@ const ProductsPage = () => {
 
   return (
     <div className="py-6 w-full">
-      {/* header */}
+      {/* Header */}
       <div className="flex items-center justify-between">
         <h2 className="font-primary font-semibold text-[26px] mb-6 flex items-center">
           <span>Products</span>
@@ -53,64 +57,62 @@ const ProductsPage = () => {
           </span>
         </h2>
         <button
-          onClick={() => setAddDrawerOpen(true)}
-          className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md font-primary cursor-pointer transition-all duration-300 "
+          onClick={() => toggleDrawer("add", true)}
+          className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md font-primary cursor-pointer transition-all duration-300"
         >
           Add Product
         </button>
       </div>
-      {/* search input-- */}
+
+      {/* Search Input */}
       <div>
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search..."
-          className="px-4 py-2 border-b-[1px] focus:outline-none font-primary  border-gray-tertiary "
+          className="px-4 py-2 border-b-[1px] focus:outline-none font-primary border-gray-tertiary"
         />
       </div>
-      {/* table container-- */}
+
+      {/* Content */}
       {products?.data.length === 0 ? (
         <NoItemFound title="Products" />
+      ) : isLoading ? (
+        <LoadingSpinner
+          size={40}
+          color="#000"
+          borderWidth="5px"
+          height="50vh"
+        />
       ) : (
-        <>
-          {isLoading ? (
-            <LoadingSpinner
-              size={40}
-              color="#000"
-              borderWidth="5px"
-              height="50vh"
-            />
-          ) : (
-            <ProductTable
-              products={products?.data}
-              editProductIdHandler={editProductIdHandler}
-              deleteProductIdHandler={deleteProductIdHandler}
-            />
-          )}
-        </>
+        <ProductTable
+          products={products?.data}
+          editProductIdHandler={(id) => handleProductAction("edit", id)}
+          deleteProductIdHandler={(id) => handleProductAction("delete", id)}
+        />
       )}
-      {/* pagination box-- */}
+
+      {/* Pagination */}
       {showPagination && (
         <PaginatedItems
           totalPages={products?.meta?.pages}
           onPageChange={handlePageChange}
         />
       )}
-      {/* add product drawer-- */}
+
+      {/* Drawer & Dialogs */}
       <AddProductDrawer
         isDrawerOpen={addDrawerOpen}
-        hideDrawerHandler={hideAddDrawerHandler}
+        hideDrawerHandler={() => toggleDrawer("add", false)}
       />
-      {/* edit product drawer */}
       <EditProductDrawer
         isDrawerOpen={editDrawerOpen}
-        hideDrawerHandler={hideEditDrawerHandler}
+        hideDrawerHandler={() => toggleDrawer("edit", false)}
         productId={selectedProductId}
       />
-      {/* delete product dialog-- */}
       <DeleteProductDialog
-        hideDialogHandler={hideDeleteDialogHandler}
+        hideDialogHandler={() => toggleDeleteDialog(false)}
         isDialogOpen={deleteDialogOpen}
         productId={selectedProductId}
         description="This action cannot be undone. This will permanently delete the product and remove its data from our servers."

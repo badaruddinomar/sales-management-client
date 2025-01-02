@@ -14,18 +14,22 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Button } from "../ui/button";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import LoadingSpinner from "../reusable/LoadingSpinner";
-import { addProductSchema } from "@/zodSchema/AddProductSchema";
 import { toast } from "sonner";
-import { IApiError, IUnit } from "@/types";
+import { IApiError, IProduct, IUnit } from "@/types";
 import FormInputField from "../reusable/FormInputField";
 import SelectComboBox from "../reusable/SelectComboBox";
 import { useGetUnitsQuery } from "@/redux/apiClient/unitApi";
 import { IoMdClose } from "react-icons/io";
 import { useCreateSaleMutation } from "@/redux/apiClient/salesApi";
+import { createSaleSchema } from "@/zodSchema/createSaleSchema";
+import { paymentMethodContstants } from "@/constants";
+import { useGetProductsQuery } from "@/redux/apiClient/productApi";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 interface IProps {
   isDrawerOpen: boolean;
@@ -35,6 +39,7 @@ interface IProps {
 const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
   const [createSaleHandler, { isLoading }] = useCreateSaleMutation();
   const { data: units } = useGetUnitsQuery({});
+  const { data: products } = useGetProductsQuery({});
 
   const unitsLabels = units?.data?.map((unit: IUnit) => {
     return {
@@ -42,22 +47,44 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
       value: unit._id,
     };
   });
-
-  const form = useForm<z.infer<typeof addProductSchema>>({
-    resolver: zodResolver(addProductSchema),
+  const paymentMethodLabels = paymentMethodContstants.map((method) => {
+    return {
+      label: method,
+      value: method,
+    };
+  });
+  const productsLabels = products?.data?.map((product: IProduct) => {
+    return {
+      label: product?.name,
+      value: product?._id,
+    };
+  });
+  const form = useForm<z.infer<typeof createSaleSchema>>({
+    resolver: zodResolver(createSaleSchema),
     defaultValues: {
-      name: "",
-      purchasePrice: 0,
-      salePrice: 0,
-      quantity: 0,
-      stock: "in-stock",
-      unit: "",
-      category: "",
+      customerName: "",
+      customerPhone: "",
+      products: [{ product: "", salePrice: 0, quantity: 0, unit: "" }],
+      totalAmount: 0,
+      paymentMethod: "CASH",
+      saleDate: new Date(),
     },
   });
-  async function onSubmit(formData: z.infer<typeof addProductSchema>) {
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "products",
+  });
+
+  async function onSubmit(formData: z.infer<typeof createSaleSchema>) {
     try {
-      await createSaleHandler(formData).unwrap();
+      const bodyData = {
+        ...formData,
+        totalAmount: formData.products.reduce(
+          (total, product) => Number(total) + Number(product.salePrice),
+          0
+        ),
+      };
+      await createSaleHandler(bodyData).unwrap();
       const successMessage = "Sale created successfully.";
       toast.success(successMessage);
       form.reset();
@@ -70,7 +97,7 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
   }
   return (
     <Drawer open={isDrawerOpen} onOpenChange={hideDrawerHandler}>
-      <DrawerContent className="px-3">
+      <DrawerContent className="px-3  max-h-screen">
         <DrawerHeader>
           <DrawerTitle className="text-center font-primary text-2xl font-semibold">
             Create Sale
@@ -79,62 +106,164 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-5 w-full max-w-[800px] mx-auto py-10"
+            className="space-y-5 w-full max-w-[800px] scrollbar-hide max-h-auto h-[80vh] overflow-y-auto mx-auto py-10"
           >
-            {/*  name input field */}
-            <FormInputField
-              control={form.control}
-              name="name"
-              label="Product Name"
-              placeholder="Product name"
-            />
-            <div className="flex items-center gap-3">
-              {/* purchase price input field */}
+            <div className="flex items-center  gap-3">
+              {/*  name input field */}
               <FormInputField
                 control={form.control}
-                name="purchasePrice"
-                label="Purchase Price"
-                placeholder="Purchase price"
-                type="number"
+                name="customerName"
+                label="Customer Name"
+                placeholder="Customer name"
               />
-              {/* sale price input field */}
+              {/*  phone input field */}
               <FormInputField
                 control={form.control}
-                name="salePrice"
-                label="Sale Price"
-                placeholder="Sale price"
-                type="number"
+                name="customerPhone"
+                label="Customer Phone"
+                placeholder="Customer Phone"
               />
             </div>
-
+            {/* products input field */}
+            <div className="w-full">
+              {fields.map((field, index) => (
+                <div
+                  key={field.id}
+                  className="space-y-3 w-full border p-4 mb-4 rounded-md"
+                >
+                  <div className="flex items-center flex-wrap w-full gap-3">
+                    <div className="w-[calc(50%-12px)]">
+                      {/* product input field-- */}
+                      <FormField
+                        control={form.control}
+                        name={`products.${index}.product`}
+                        render={() => (
+                          <FormItem className="flex flex-col font-primary mt-2 overflow-x-hidden">
+                            <FormLabel>Product</FormLabel>
+                            <Controller
+                              name={`products.${index}.product`}
+                              control={form.control}
+                              render={({ field }) => (
+                                <SelectComboBox
+                                  title={`Product ${index + 1}`}
+                                  value={field.value}
+                                  dataArr={productsLabels} // Replace with your dynamic units
+                                  onChange={(value) => field.onChange(value)}
+                                />
+                              )}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="w-[calc(50%-12px)]">
+                      {/* Sale Price */}
+                      <FormInputField
+                        control={form.control}
+                        name={`products.${index}.salePrice`}
+                        label="Sale Price"
+                        placeholder="Sale price"
+                        type="number"
+                      />
+                    </div>
+                    <div className="w-[calc(50%-12px)]">
+                      {/* Quantity */}
+                      <FormInputField
+                        control={form.control}
+                        name={`products.${index}.quantity`}
+                        label="Quantity"
+                        placeholder="Quantity"
+                        type="number"
+                      />
+                    </div>
+                    <div className="w-[calc(50%-12px)]">
+                      {/* unit input field-- */}
+                      <FormField
+                        control={form.control}
+                        name={`products.${index}.unit`}
+                        render={() => (
+                          <FormItem className="flex flex-col font-primary mt-2">
+                            <FormLabel>Unit</FormLabel>
+                            <Controller
+                              name={`products.${index}.unit`}
+                              control={form.control}
+                              render={({ field }) => (
+                                <SelectComboBox
+                                  title="Unit"
+                                  value={field.value}
+                                  dataArr={unitsLabels} // Replace with your dynamic units
+                                  onChange={(value) => field.onChange(value)}
+                                />
+                              )}
+                            />
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    className="text-sm text-[#fff] bg-red-400 font-primary rounded-md px-3 py-1 hover:bg-red-200 transition-all duration-300"
+                    onClick={() => remove(index)} // Remove current product
+                  >
+                    Remove
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="text-sm text-[#fff] bg-blue-400 font-primary rounded-md px-3 py-1 hover:bg-blue-200 transition-all duration-300 mx-auto"
+                onClick={() =>
+                  append({ product: "", salePrice: 0, quantity: 0, unit: "" })
+                } // Add new product
+              >
+                Add
+              </button>
+            </div>
             <div className="flex items-center gap-3">
-              {/* quantity input field */}
               <div className="w-[calc(50%-12px)]">
-                <FormInputField
-                  control={form.control}
-                  name="quantity"
-                  label="Quantity"
-                  placeholder="Quantity"
-                  type="number"
-                />
-              </div>
-              <div className="w-[calc(50%-12px)] mt-2">
-                {/* unit input field-- */}
+                {/* payment method input field-- */}
                 <FormField
                   control={form.control}
-                  name="unit"
+                  name="paymentMethod"
                   render={({}) => (
                     <FormItem className="flex flex-col font-primary">
-                      <FormLabel>Unit</FormLabel>
+                      <FormLabel>Payment Method</FormLabel>
                       <Controller
-                        name="unit"
+                        name="paymentMethod"
                         control={form.control}
                         render={({ field }) => (
                           <SelectComboBox
-                            title="unit"
-                            value={field.value}
-                            dataArr={unitsLabels}
+                            title=" Method"
+                            value={field.value as string}
+                            dataArr={paymentMethodLabels}
                             onChange={(value) => field.onChange(value)}
+                          />
+                        )}
+                      />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="w-[calc(50%-12px)]">
+                <FormField
+                  control={form.control}
+                  name="saleDate"
+                  render={({}) => (
+                    <FormItem className="flex flex-col font-primary">
+                      <FormLabel>Select Date</FormLabel>
+                      <Controller
+                        name="saleDate"
+                        control={form.control}
+                        render={({ field }) => (
+                          <DatePicker
+                            selected={field.value}
+                            onChange={(value) => field.onChange(value)}
+                            dateFormat="MMMM d, yyyy"
+                            className="focus:outline-none border-[1px] border-[#ccc] h-[50px] rounded-md p-5 w-full"
                           />
                         )}
                       />
@@ -145,6 +274,7 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
               </div>
             </div>
 
+            {/* */}
             <Button
               type="submit"
               className="font-semibold text-base font-secondary h-[50px] text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"

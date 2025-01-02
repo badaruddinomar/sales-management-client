@@ -4,6 +4,7 @@ import NoItemFound from "@/components/reusable/NoItemFound";
 import PaginatedItems from "@/components/reusable/PaginatedItem";
 import CreateSaleDrawer from "@/components/sale/CreateSaleDrawer";
 import DeleteSaleDialog from "@/components/sale/DeleteSaleDialog";
+import EditSaleDrawer from "@/components/sale/EditSaleDrawer";
 import SaleTable from "@/components/sale/SaleTable";
 import { useGetSalesQuery } from "@/redux/apiClient/salesApi";
 import { formatedNumber } from "@/utils";
@@ -19,13 +20,16 @@ const SalesPage = () => {
     page: currentPage,
   });
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
+  const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
   // handler--
   const hideDeleteDialogHandler = () => setDeleteDialogOpen(false);
   const hideAddDrawerHandler = () => setAddDrawerOpen(false);
+  const hideEditDrawerHandler = () => setEditDrawerOpen(false);
+
   const editSaleIdHandler = (id: string) => {
     setSelectedSaleId(id);
-    // setEditDialogOpen(true);
+    setEditDrawerOpen(true);
   };
   const deleteSaleIdHandler = (id: string) => {
     setSelectedSaleId(id);
@@ -90,9 +94,16 @@ const SalesPage = () => {
           onPageChange={handlePageChange}
         />
       )}
+      {/* create sale drawer-- */}
       <CreateSaleDrawer
         isDrawerOpen={addDrawerOpen}
         hideDrawerHandler={hideAddDrawerHandler}
+      />
+      {/* edit sale drawer-- */}
+      <EditSaleDrawer
+        hideDrawerHandler={hideEditDrawerHandler}
+        isDrawerOpen={editDrawerOpen}
+        saleId={selectedSaleId}
       />
       {/* delete sale dialog-- */}
       <DeleteSaleDialog

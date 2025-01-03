@@ -21,11 +21,9 @@ const CategoryTable = ({
   editCategoryIdHandler,
   deleteCategoryIdHandler,
 }: IProps) => {
-  const editCategoryIdChangeHandler = (id: string) => {
-    editCategoryIdHandler(id);
-  };
-  const deleteCategoryIdChangeHandler = (id: string) => {
-    deleteCategoryIdHandler(id);
+  const handleCategoryAction = (action: "edit" | "delete", id: string) => {
+    if (action === "edit") editCategoryIdHandler(id);
+    if (action === "delete") deleteCategoryIdHandler(id);
   };
   const tableHeading = ["Name", "Actions"];
   return (
@@ -54,13 +52,13 @@ const CategoryTable = ({
                 </TableCell>
                 <TableCell className="py-3 flex items-center justify-center  space-x-2">
                   <button
-                    onClick={() => editCategoryIdChangeHandler(unit?._id)}
+                    onClick={() => handleCategoryAction("edit", unit?._id)}
                     className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"
                   >
                     <MdOutlineModeEditOutline />
                   </button>
                   <button
-                    onClick={() => deleteCategoryIdChangeHandler(unit?._id)}
+                    onClick={() => handleCategoryAction("delete", unit?._id)}
                     className="bg-red-100 text-red-500 hover:bg-red-200 transition-all duration-300 py-1 rounded-md px-2"
                   >
                     <PiTrash />

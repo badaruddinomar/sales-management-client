@@ -28,7 +28,7 @@ const DeleteProductDialog = ({
   const deleteProductHandler = async () => {
     try {
       await deleteProduct({ productId }).unwrap();
-      const successMessage = "Product edited successfully.";
+      const successMessage = "Product deleted successfully.";
       toast.success(successMessage);
       hideDialogHandler();
     } catch (err: unknown) {

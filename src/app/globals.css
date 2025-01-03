@@ -90,3 +90,19 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+@page {
+  margin: 1rem;
+}
+@media print {
+  /* General container styling for print */
+  .print-container {
+    background-color: white;
+    color: black;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .avoid-page-break {
+    page-break-inside: avoid;
+  }
+}

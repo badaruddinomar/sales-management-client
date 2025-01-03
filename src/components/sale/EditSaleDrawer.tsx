@@ -120,7 +120,7 @@ const EditSaleDrawer = ({
         ),
       };
       await editSaleHandler({ saleId, bodyData }).unwrap();
-      const successMessage = "Sale created successfully.";
+      const successMessage = "Sale edited successfully.";
       toast.success(successMessage);
       form.reset();
       hideDrawerHandler();

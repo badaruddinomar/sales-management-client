@@ -11,6 +11,8 @@ import { ISale } from "@/types";
 import { PiTrash } from "react-icons/pi";
 import { MdOutlineModeEditOutline } from "react-icons/md";
 import { formatDate } from "@/utils";
+import { GoEye } from "react-icons/go";
+import Link from "next/link";
 
 interface IProps {
   sales: ISale[];
@@ -74,6 +76,12 @@ const SaleTable = ({
                   {formatDate(sale?.saleDate)}
                 </TableCell>
                 <TableCell className="py-3 flex items-center justify-center  space-x-2">
+                  <Link
+                    href={`/sales/${sale?._id}`}
+                    className="bg-purple-200 transition-all duration-300 hover:bg-purple-300 px-2 py-1 rounded-md"
+                  >
+                    <GoEye className="text-purple-500" />
+                  </Link>
                   <button
                     onClick={() => editSaleIdChangeHandler(sale?._id)}
                     className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"

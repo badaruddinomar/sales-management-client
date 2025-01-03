@@ -22,12 +22,9 @@ const SaleTable = ({
   editSaleIdHandler,
   deleteSaleIdHandler,
 }: IProps) => {
-  const editSaleIdChangeHandler = (id: string) => {
-    editSaleIdHandler(id);
-  };
-  const deleteSaleIdChangeHandler = (id: string) => {
-    deleteSaleIdHandler(id);
-  };
+  const editSaleIdChangeHandler = (id: string) => editSaleIdHandler(id);
+  const deleteSaleIdChangeHandler = (id: string) => deleteSaleIdHandler(id);
+
   const tableHeading = [
     "Customer",
     "Phone",

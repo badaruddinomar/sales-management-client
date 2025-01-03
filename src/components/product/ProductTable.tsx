@@ -21,12 +21,11 @@ const ProductTable = ({
   editProductIdHandler,
   deleteProductIdHandler,
 }: IProps) => {
-  const editProductIdChangeHandler = (id: string) => {
-    editProductIdHandler(id);
-  };
+  const editProductIdChangeHandler = (id: string) => editProductIdHandler(id);
   const deleteProductIdChangeHandler = (id: string) => {
     deleteProductIdHandler(id);
   };
+
   const tableHeading = [
     "Name",
     "Qty",

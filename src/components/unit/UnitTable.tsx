@@ -21,12 +21,9 @@ const UnitTable = ({
   editUnitIdHandler,
   deleteUnitIdHandler,
 }: IProps) => {
-  const editUnitIdChangeHandler = (id: string) => {
-    editUnitIdHandler(id);
-  };
-  const deleteUnitIdChangeHandler = (id: string) => {
-    deleteUnitIdHandler(id);
-  };
+  const editUnitIdChangeHandler = (id: string) => editUnitIdHandler(id);
+  const deleteUnitIdChangeHandler = (id: string) => deleteUnitIdHandler(id);
+
   const tableHeading = ["Name", "Actions"];
   return (
     <div className="w-full overflow-x-auto my-5 border-[1px] border-[#eee] rounded-lg ">

@@ -9,26 +9,29 @@ import { toast } from "sonner";
 import { IApiError } from "@/types";
 import { Button } from "../ui/button";
 import LoadingSpinner from "../reusable/LoadingSpinner";
-import { useDeleteCategoryMutation } from "@/redux/apiClient/categoryApi";
+import {
+  useDeleteCategoryMutation,
+  useGetCategoryQuery,
+} from "@/redux/apiClient/categoryApi";
 
 interface IProps {
   categoryId: string;
   hideDialogHandler: () => void;
   isDialogOpen: boolean;
-  description: string;
 }
 
 const DeleteCategoryDialog = ({
   categoryId,
   hideDialogHandler,
   isDialogOpen,
-  description,
 }: IProps) => {
   const [deleteCategory, { isLoading }] = useDeleteCategoryMutation();
+  const { data: category } = useGetCategoryQuery({ categoryId });
   const deleteCategoryHandler = async () => {
     try {
-      await deleteCategory(categoryId).unwrap();
-      const successMessage = "Category deleted successfully.";
+      const response = await deleteCategory(categoryId).unwrap();
+      const successMessage =
+        response?.message || "Category deleted successfully.";
       toast.success(successMessage);
       hideDialogHandler();
     } catch (err: unknown) {
@@ -45,7 +48,7 @@ const DeleteCategoryDialog = ({
             Are you absolutely sure?
           </DialogTitle>
           <DialogDescription className="font-primary text-base my-3 leading-[1.5]">
-            {description}
+            {`This action cannot be undone. ${category?.meta?.productsCount} product's in this category will be deleted.`}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2">

@@ -112,7 +112,6 @@ const UnitsPage = () => {
         isDialogOpen={dialogState.delete}
         hideDialogHandler={() => toggleDialog("delete", false)}
         unitId={selectedUnitId}
-        description="This action will permanently delete the unit and also related to its products."
       />
     </div>
   );

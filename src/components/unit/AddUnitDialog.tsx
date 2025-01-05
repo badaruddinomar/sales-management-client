@@ -33,8 +33,8 @@ const AddUnitDialog = ({ hideDialogHandler, isDialogOpen }: IProps) => {
   });
   async function onSubmit(formData: z.infer<typeof addUnitSchema>) {
     try {
-      await addUnitHandler(formData).unwrap();
-      const successMessage = "Unit added successfully.";
+      const response = await addUnitHandler(formData).unwrap();
+      const successMessage = response?.message || "Unit added successfully.";
       toast.success(successMessage);
       form.reset();
       hideDialogHandler();

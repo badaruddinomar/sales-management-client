@@ -95,8 +95,12 @@ const EditProductDrawer = ({
 
   async function onSubmit(formData: z.infer<typeof addProductSchema>) {
     try {
-      await editProductHandler({ bodyData: formData, productId }).unwrap();
-      const successMessage = "Product edited successfully.";
+      const response = await editProductHandler({
+        bodyData: formData,
+        productId,
+      }).unwrap();
+      const successMessage =
+        response?.message || "Product edited successfully.";
       toast.success(successMessage);
       form.reset();
       hideDrawerHandler();

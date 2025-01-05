@@ -33,8 +33,9 @@ const AddCategoryDialog = ({ hideDialogHandler, isDialogOpen }: IProps) => {
   });
   async function onSubmit(formData: z.infer<typeof addCategorySchema>) {
     try {
-      await addCategoryHandler(formData).unwrap();
-      const successMessage = "Category added successfully.";
+      const response = await addCategoryHandler(formData).unwrap();
+      const successMessage =
+        response?.message || "Category added successfully.";
       toast.success(successMessage);
       form.reset();
       hideDialogHandler();

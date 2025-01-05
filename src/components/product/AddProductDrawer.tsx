@@ -71,8 +71,8 @@ const AddProductDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
   });
   async function onSubmit(formData: z.infer<typeof addProductSchema>) {
     try {
-      await addProductHandler(formData).unwrap();
-      const successMessage = "Product added successfully.";
+     const response =  await addProductHandler(formData).unwrap();
+      const successMessage = response?.message || "Product added successfully.";
       toast.success(successMessage);
       form.reset();
       hideDrawerHandler();

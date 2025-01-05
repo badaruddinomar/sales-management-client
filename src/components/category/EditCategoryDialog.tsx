@@ -51,8 +51,12 @@ const EditCategoryDialog = ({
   }, [form, category?.data]);
   async function onSubmit(formData: z.infer<typeof editCategorySchema>) {
     try {
-      await editCategoryHandler({ bodyData: formData, categoryId }).unwrap();
-      const successMessage = "Category edited successfully.";
+      const response = await editCategoryHandler({
+        bodyData: formData,
+        categoryId,
+      }).unwrap();
+      const successMessage =
+        response?.message || "Category edited successfully.";
       toast.success(successMessage);
       form.reset();
       hideDialogHandler();

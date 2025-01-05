@@ -84,8 +84,8 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
           0
         ),
       };
-      await createSaleHandler(bodyData).unwrap();
-      const successMessage = "Sale created successfully.";
+      const response = await createSaleHandler(bodyData).unwrap();
+      const successMessage = response?.message || "Sale created successfully.";
       toast.success(successMessage);
       form.reset();
       hideDrawerHandler();

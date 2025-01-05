@@ -112,7 +112,6 @@ const CategoriesPage = () => {
         isDialogOpen={dialogState.delete}
         hideDialogHandler={() => toggleDialog("delete", false)}
         categoryId={selectedCategoryId}
-        description="This action will permanently delete the category and also related to its products."
       />
     </div>
   );

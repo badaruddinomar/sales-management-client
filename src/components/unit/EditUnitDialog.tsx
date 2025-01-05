@@ -51,8 +51,11 @@ const EditUnitDialog = ({
   }, [form, unit?.data]);
   async function onSubmit(formData: z.infer<typeof editUnitSchema>) {
     try {
-      await editUnitHandler({ bodyData: formData, unitId }).unwrap();
-      const successMessage = "Unit edited successfully.";
+      const reseponse = await editUnitHandler({
+        bodyData: formData,
+        unitId,
+      }).unwrap();
+      const successMessage = reseponse?.message || "Unit edited successfully.";
       toast.success(successMessage);
       form.reset();
       hideDialogHandler();

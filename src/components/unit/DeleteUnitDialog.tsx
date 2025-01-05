@@ -9,26 +9,28 @@ import { toast } from "sonner";
 import { IApiError } from "@/types";
 import { Button } from "../ui/button";
 import LoadingSpinner from "../reusable/LoadingSpinner";
-import { useDeleteUnitMutation } from "@/redux/apiClient/unitApi";
+import {
+  useDeleteUnitMutation,
+  useGetUnitQuery,
+} from "@/redux/apiClient/unitApi";
 
 interface IProps {
   unitId: string;
   hideDialogHandler: () => void;
   isDialogOpen: boolean;
-  description: string;
 }
 
 const DeleteUnitDialog = ({
   unitId,
   hideDialogHandler,
   isDialogOpen,
-  description,
 }: IProps) => {
   const [deleteUnit, { isLoading }] = useDeleteUnitMutation();
+  const { data: unit } = useGetUnitQuery({ unitId });
   const deleteUnitHandler = async () => {
     try {
-      await deleteUnit(unitId).unwrap();
-      const successMessage = "Unit deleted successfully.";
+      const response = await deleteUnit(unitId).unwrap();
+      const successMessage = response?.message || "Unit deleted successfully.";
       toast.success(successMessage);
       hideDialogHandler();
     } catch (err: unknown) {
@@ -45,7 +47,7 @@ const DeleteUnitDialog = ({
             Are you absolutely sure?
           </DialogTitle>
           <DialogDescription className="font-primary text-base my-3 leading-[1.5]">
-            {description}
+            {`This action cannot be undone. ${unit?.meta?.productsCount} product's in this unit will be deleted.`}
           </DialogDescription>
         </DialogHeader>
         <div className="flex justify-end gap-2">

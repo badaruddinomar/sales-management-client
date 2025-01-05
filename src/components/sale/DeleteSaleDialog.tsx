@@ -26,8 +26,8 @@ const DeleteSaleDialog = ({
   const [deleteSale, { isLoading }] = useDeleteSaleMutation();
   const deleteSaleHandler = async () => {
     try {
-      await deleteSale(saleId).unwrap();
-      const successMessage = "Sale deleted successfully.";
+      const response = await deleteSale(saleId).unwrap();
+      const successMessage = response?.message || "Sale deleted successfully.";
       toast.success(successMessage);
       hideDialogHandler();
     } catch (err: unknown) {

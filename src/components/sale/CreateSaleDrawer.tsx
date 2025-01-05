@@ -64,7 +64,7 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
     defaultValues: {
       customerName: "",
       customerPhone: "",
-      products: [{ product: "", salePrice: 0, quantity: 0, unit: "" }],
+      products: [{ product: "", salePrice: 0, unitAmount: 0, unit: "" }],
       totalAmount: 0,
       paymentMethod: "CASH",
       saleDate: new Date(),
@@ -168,12 +168,12 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
                       />
                     </div>
                     <div className="w-[calc(50%-12px)]">
-                      {/* Quantity */}
+                      {/* Unit Amount input field-- */}
                       <FormInputField
                         control={form.control}
-                        name={`products.${index}.quantity`}
-                        label="Quantity"
-                        placeholder="Quantity"
+                        name={`products.${index}.unitAmount`}
+                        label="Unit Amount"
+                        placeholder="Unit amount"
                         type="number"
                       />
                     </div>
@@ -216,7 +216,7 @@ const CreateSaleDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
                 type="button"
                 className="text-sm text-[#fff] bg-blue-400 font-primary rounded-md px-3 py-1 hover:bg-blue-200 transition-all duration-300 mx-auto"
                 onClick={() =>
-                  append({ product: "", salePrice: 0, quantity: 0, unit: "" })
+                  append({ product: "", salePrice: 0, unitAmount: 0, unit: "" })
                 } // Add new product
               >
                 Add

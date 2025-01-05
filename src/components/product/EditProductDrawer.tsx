@@ -72,7 +72,7 @@ const EditProductDrawer = ({
       name: "",
       purchasePrice: 0,
       salePrice: 0,
-      quantity: 0,
+      unitAmount: 0,
       stock: "in-stock",
       unit: "",
       category: "",
@@ -85,7 +85,7 @@ const EditProductDrawer = ({
         name: product?.data?.name,
         purchasePrice: product?.data?.purchasePrice,
         salePrice: product?.data?.salePrice,
-        quantity: product?.data?.quantity,
+        unitAmount: product?.data?.unitAmount,
         stock: product?.data?.stock,
         unit: product?.data?.unit?._id,
         category: product?.data?.category?._id,
@@ -150,13 +150,13 @@ const EditProductDrawer = ({
             </div>
 
             <div className="flex items-center gap-3">
-              {/* quantity input field */}
+              {/* unit amount input field */}
               <div className="w-[calc(50%-12px)]">
                 <FormInputField
                   control={form.control}
-                  name="quantity"
-                  label="Quantity"
-                  placeholder="Quantity"
+                  name="unitAmount"
+                  label="Unit Amount"
+                  placeholder="Unit amount"
                   type="number"
                 />
               </div>

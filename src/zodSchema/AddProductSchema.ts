@@ -6,7 +6,7 @@ export const addProductSchema = z.object({
     .number()
     .min(0, "Purchase price must be greater than 0"),
   salePrice: z.coerce.number().min(0, "Sale price must be greater than 0"),
-  quantity: z.coerce.number().min(1, "Quantity must be greater than 0"),
+  unitAmount: z.coerce.number().min(1, "Unit amount must be greater than 0"),
   stock: z.enum(["in-stock", "out-of-stock"], {
     required_error: "Stock is required",
     invalid_type_error: 'Stock must be "in-stock" or "out-of-stock"',

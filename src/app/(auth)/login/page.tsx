@@ -43,9 +43,14 @@ const Login = () => {
   });
   async function onSubmit(formData: z.infer<typeof loginSchema>) {
     try {
-      const data = await loginHandler(formData).unwrap();
+      const response = await loginHandler(formData).unwrap();
+      if (response?.data?.isVerified === false) {
+        router.push("/verify-email");
+        toast.error("Please verify your email.");
+        return;
+      }
       router.push("/");
-      dispatch(addUserToStore(data?.data));
+      dispatch(addUserToStore(response?.data));
       const successMessage = "Login successful.";
       toast.success(successMessage);
       form.reset();

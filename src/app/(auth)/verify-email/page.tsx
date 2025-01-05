@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { useVerifyEmailMutation } from "@/redux/apiClient/userApi";
 import { IApiError } from "@/types";
 import LoadingSpinner from "@/components/reusable/LoadingSpinner";
+import Link from "next/link";
 
 const VerifyEmailPage = () => {
   const [verifyCode, setVerifyCode] = useState<string>("");
@@ -90,12 +91,12 @@ const VerifyEmailPage = () => {
             </InputOTPGroup>
           </InputOTP>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="flex items-center flex-col justify-center gap-y-2">
           <Button
             size={null}
             disabled={isLoading}
             onClick={submitHandler}
-            className="font-semibold text-base font-secondary px-10 py-3 text-[#fff] bg-blue-primary rounded-lg w-full hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
+            className="font-semibold text-base font-secondary px-10 py-3 text-[#fff] bg-blue-primary rounded-lg w-full  hover:opacity-[.7] transition-all duration-300 hover:bg-blue-primary"
           >
             {isLoading ? (
               <LoadingSpinner
@@ -108,6 +109,18 @@ const VerifyEmailPage = () => {
               "Submit"
             )}
           </Button>
+          <Link
+            href={"/resend-verify-code"}
+            className="flex justify-center my-2 items-center"
+          >
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              className="font-secondary"
+            >
+              Didn&apos;t receive the code?
+            </Button>
+          </Link>
         </CardFooter>
       </Card>
     </div>

@@ -28,7 +28,7 @@ const ProductTable = ({
 
   const tableHeading = [
     "Name",
-    "Qty",
+    "Unit Amount",
     "Unit",
     "Sale Price",
     "Purchase Price",

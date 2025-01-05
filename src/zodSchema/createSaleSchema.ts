@@ -11,7 +11,7 @@ export const createSaleSchema = z.object({
     .array(
       z.object({
         product: z.string().min(1, "Product is required"),
-        quantity: z.coerce.number().min(1, "Quantity must be at least 1"),
+        unitAmount: z.coerce.number().min(1, "Unit amount must be at least 1"),
         unit: z.string().min(1, "Unit is required"),
         salePrice: z.coerce
           .number()
@@ -20,11 +20,8 @@ export const createSaleSchema = z.object({
     )
     .min(1, "At least one product is required"),
   totalAmount: z.number().min(0, "Total amount must be a non-negative number"),
-  paymentMethod: z.enum(["CASH", "CARD", "ONLINE"]).optional(),
-  saleDate: z
-    .date()
-    .optional()
-    .refine((date) => date instanceof Date, {
-      message: "Invalid date format",
-    }),
+  paymentMethod: z.enum(["CASH", "CARD", "ONLINE"]),
+  saleDate: z.date().refine((date) => date instanceof Date, {
+    message: "Invalid date format",
+  }),
 });

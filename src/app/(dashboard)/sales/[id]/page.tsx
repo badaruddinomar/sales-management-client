@@ -20,7 +20,7 @@ import { useRef } from "react";
 interface IProduct {
   _id: string;
   product: { _id: string; name: string };
-  quantity: number;
+  unitAmount: number;
   unit: { _id: string; name: string };
   salePrice: number;
 }
@@ -38,7 +38,7 @@ const SalesDetailsPage = () => {
       <LoadingSpinner size={40} color="#000" borderWidth="5px" height="50vh" />
     );
   }
-  const tableHeading = ["Product", "Qty", "Unit", "Sale Price"];
+  const tableHeading = ["Product", "Unit Amount", "Unit", "Sale Price"];
 
   return (
     <div className="w-full px-3 py-6">
@@ -103,7 +103,7 @@ const SalesDetailsPage = () => {
                         {product?.product?.name}
                       </TableCell>
                       <TableCell className="font-medium  py-3 ">
-                        {product?.quantity}
+                        {product?.unitAmount}
                       </TableCell>
                       <TableCell className="font-medium   py-3 ">
                         {product?.unit?.name}

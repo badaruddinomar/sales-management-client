@@ -3,11 +3,14 @@ import { useLayoutEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useGetUserQuery } from "@/redux/apiClient/userApi";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks";
-import { removeUserFromStore } from "@/redux/reducer/userReducer";
+import {
+  addUserToStore,
+  removeUserFromStore,
+} from "@/redux/reducer/userReducer";
 
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
-  const { isError } = useGetUserQuery({});
+  const { data: userData, isError } = useGetUserQuery({});
   const { user } = useAppSelector((state) => state.userReducer);
   const dispatch = useAppDispatch();
 
@@ -15,10 +18,10 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
     if (isError) {
       router.push("/login");
       dispatch(removeUserFromStore());
+    } else {
+      dispatch(addUserToStore(userData?.data));
     }
-    if (user?.isVerified === false) router.push("/resend-verify-code");
-    if (!user) router.push("/login");
-  }, [user, router, isError, dispatch]);
+  }, [router, userData?.data, isError, dispatch]);
 
   if (!user) {
     return null;

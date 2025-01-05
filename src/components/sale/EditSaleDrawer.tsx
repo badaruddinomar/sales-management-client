@@ -44,7 +44,7 @@ type TProduct = {
   _id: string;
   product: IProduct;
   salePrice: number;
-  quantity: number;
+  unitAmount: number;
   unit: IUnit;
 };
 const EditSaleDrawer = ({
@@ -80,7 +80,7 @@ const EditSaleDrawer = ({
     defaultValues: {
       customerName: "",
       customerPhone: "",
-      products: [{ product: "", salePrice: 0, quantity: 0, unit: "" }],
+      products: [{ product: "", salePrice: 0, unitAmount: 0, unit: "" }],
       totalAmount: 0,
       paymentMethod: "CASH",
       saleDate: new Date(),
@@ -100,7 +100,7 @@ const EditSaleDrawer = ({
           return {
             product: product.product._id,
             salePrice: product.salePrice,
-            quantity: product.quantity,
+            unitAmount: product.unitAmount,
             unit: product.unit._id,
           };
         }),
@@ -203,12 +203,12 @@ const EditSaleDrawer = ({
                       />
                     </div>
                     <div className="w-[calc(50%-12px)]">
-                      {/* Quantity */}
+                      {/* Unit Amount */}
                       <FormInputField
                         control={form.control}
-                        name={`products.${index}.quantity`}
-                        label="Quantity"
-                        placeholder="Quantity"
+                        name={`products.${index}.unitAmount`}
+                        label="Unit Amount"
+                        placeholder="Unit amount"
                         type="number"
                       />
                     </div>
@@ -251,7 +251,7 @@ const EditSaleDrawer = ({
                 type="button"
                 className="text-sm text-[#fff] bg-blue-400 font-primary rounded-md px-3 py-1 hover:bg-blue-200 transition-all duration-300 mx-auto"
                 onClick={() =>
-                  append({ product: "", salePrice: 0, quantity: 0, unit: "" })
+                  append({ product: "", salePrice: 0, unitAmount: 0, unit: "" })
                 } // Add new product
               >
                 Add

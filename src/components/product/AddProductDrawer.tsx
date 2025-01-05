@@ -63,7 +63,7 @@ const AddProductDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
       name: "",
       purchasePrice: 0,
       salePrice: 0,
-      quantity: 0,
+      unitAmount: 0,
       stock: "in-stock",
       unit: "",
       category: "",
@@ -71,7 +71,7 @@ const AddProductDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
   });
   async function onSubmit(formData: z.infer<typeof addProductSchema>) {
     try {
-     const response =  await addProductHandler(formData).unwrap();
+      const response = await addProductHandler(formData).unwrap();
       const successMessage = response?.message || "Product added successfully.";
       toast.success(successMessage);
       form.reset();
@@ -122,13 +122,13 @@ const AddProductDrawer = ({ isDrawerOpen, hideDrawerHandler }: IProps) => {
             </div>
 
             <div className="flex items-center gap-3">
-              {/* quantity input field */}
+              {/* unit amount input field */}
               <div className="w-[calc(50%-12px)]">
                 <FormInputField
                   control={form.control}
-                  name="quantity"
-                  label="Quantity"
-                  placeholder="Quantity"
+                  name="unitAmount"
+                  label="Unit Amount"
+                  placeholder="Unit amount"
                   type="number"
                 />
               </div>

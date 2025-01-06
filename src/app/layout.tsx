@@ -36,9 +36,8 @@ const sfPro = localFont({
   variable: "--font-sf-pro",
 });
 export const metadata: Metadata = {
-  title: "Slaes Pro",
-  description:
-    "Slaes Prop is a platform where you can keep your sales records.",
+  title: "Weno",
+  description: "Weno is a platform where you can keep your sales records.",
 };
 
 export default function RootLayout({

@@ -1,4 +1,4 @@
-import numbro from "numbro";
+import numeral from "numeral";
 
 export const checkNumber = (number: number) => {
   if (number > 0) {
@@ -10,7 +10,11 @@ export const checkNumber = (number: number) => {
   }
 };
 export const formatedNumber = (number: number) => {
-  return numbro(number).format({ thousandSeparated: true });
+  if (number) {
+    return numeral(number).format("0a");
+  } else {
+    return null;
+  }
 };
 import { format, parseISO } from "date-fns";
 

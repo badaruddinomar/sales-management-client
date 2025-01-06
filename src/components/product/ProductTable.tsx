@@ -62,10 +62,8 @@ const ProductTable = ({
                 </TableCell>
                 <TableCell className="py-3">{product?.quantity}</TableCell>
                 <TableCell className="py-3">{product?.unit?.name}</TableCell>
-                <TableCell className="py-3">${product?.salePrice}</TableCell>
-                <TableCell className="py-3">
-                  ${product?.purchasePrice}
-                </TableCell>
+                <TableCell className="py-3">{product?.salePrice}</TableCell>
+                <TableCell className="py-3">{product?.purchasePrice}</TableCell>
                 <TableCell className={`py-3  `}>
                   <span
                     className={`px-3 py-1 rounded-md ${

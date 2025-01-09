@@ -7,10 +7,15 @@ export const statsApi = createApi({
   tagTypes: ["Stats"],
   endpoints: (builder) => ({
     getStats: builder.query({
-      query: ({ lastMonth }) => ({
-        url: `/stats/all?lastMonth=${lastMonth}`,
-        method: "GET",
-      }),
+      query: ({ lastMonth }) => {
+        const params = new URLSearchParams();
+        if (lastMonth) params.append("lastMonth", lastMonth);
+        return {
+          url: `/stats/all`,
+          method: "GET",
+          params,
+        };
+      },
       providesTags: ["Stats"],
     }),
   }),

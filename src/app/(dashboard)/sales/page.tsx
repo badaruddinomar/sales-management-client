@@ -6,9 +6,14 @@ import CreateSaleDrawer from "@/components/sale/CreateSaleDrawer";
 import DeleteSaleDialog from "@/components/sale/DeleteSaleDialog";
 import EditSaleDrawer from "@/components/sale/EditSaleDrawer";
 import SaleTable from "@/components/sale/SaleTable";
+import StatsCard from "@/components/StatsCard";
 import { useGetSalesQuery } from "@/redux/apiClient/salesApi";
 import { formatedNumber } from "@/utils";
 import { useState } from "react";
+import { LiaSellsy } from "react-icons/lia";
+import { CiCoins1 } from "react-icons/ci";
+import { IoNewspaperOutline } from "react-icons/io5";
+import { useGetStatsQuery } from "@/redux/apiClient/statsApi";
 
 const SalesPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -19,6 +24,7 @@ const SalesPage = () => {
     limit: 9,
     page: currentPage,
   });
+  const { data: stats } = useGetStatsQuery({});
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
@@ -56,6 +62,31 @@ const SalesPage = () => {
           Create Sale
         </button>
       </div>
+      <div className="flex flex-wrap gap-4 my-5">
+        {/* stats card-- */}
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.33%-16px)] ">
+          <StatsCard
+            title={"Total Sales"}
+            value={stats?.data?.sales?.total}
+            icon={LiaSellsy}
+          />
+        </div>
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.33%-16px)]">
+          <StatsCard
+            title={"Total Revenue"}
+            value={stats?.data?.revenue?.total}
+            icon={CiCoins1}
+          />
+        </div>
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(33.33%-16px)]">
+          <StatsCard
+            title={"Total Transactions"}
+            value={stats?.data?.transactions?.total}
+            icon={IoNewspaperOutline}
+          />
+        </div>
+      </div>
+
       {/* search input-- */}
       <div>
         <input

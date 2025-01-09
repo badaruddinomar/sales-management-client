@@ -66,34 +66,42 @@ const Home = () => {
       {/* dashboard starts cards */}
       <div className="flex flex-wrap gap-4">
         {/* stats card-- */}
-        <StatsCard
-          title={"Total Sales"}
-          value={stats?.data?.sales?.total}
-          icon={LiaSellsy}
-          percentage={stats?.data?.sales?.percentage}
-          selectedMonth={month}
-        />
-        <StatsCard
-          title={"Total Revenue"}
-          value={stats?.data?.revenue?.total}
-          icon={CiCoins1}
-          percentage={stats?.data?.revenue?.percentage}
-          selectedMonth={month}
-        />
-        <StatsCard
-          title={"Total Products"}
-          value={stats?.data?.products?.total}
-          icon={FiShoppingBag}
-          percentage={stats?.data?.products?.percentage}
-          selectedMonth={month}
-        />
-        <StatsCard
-          title={"Total Transactions"}
-          value={stats?.data?.transactions?.total}
-          icon={IoNewspaperOutline}
-          percentage={stats?.data?.transactions?.percentage}
-          selectedMonth={month}
-        />
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+          <StatsCard
+            title={"Total Sales"}
+            value={stats?.data?.sales?.total}
+            icon={LiaSellsy}
+            percentage={stats?.data?.sales?.percentage}
+            selectedMonth={month}
+          />
+        </div>
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+          <StatsCard
+            title={"Total Revenue"}
+            value={stats?.data?.revenue?.total}
+            icon={CiCoins1}
+            percentage={stats?.data?.revenue?.percentage}
+            selectedMonth={month}
+          />
+        </div>
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+          <StatsCard
+            title={"Total Products"}
+            value={stats?.data?.products?.total}
+            icon={FiShoppingBag}
+            percentage={stats?.data?.products?.percentage}
+            selectedMonth={month}
+          />
+        </div>
+        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+          <StatsCard
+            title={"Total Transactions"}
+            value={stats?.data?.transactions?.total}
+            icon={IoNewspaperOutline}
+            percentage={stats?.data?.transactions?.percentage}
+            selectedMonth={month}
+          />
+        </div>
       </div>
     </main>
   );

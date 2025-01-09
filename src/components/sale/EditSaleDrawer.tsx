@@ -29,7 +29,7 @@ import {
   useGetSaleQuery,
 } from "@/redux/apiClient/salesApi";
 import { createSaleSchema } from "@/zodSchema/createSaleSchema";
-import { paymentMethodContstants } from "@/constants";
+import { genderConst, paymentMethodContstants } from "@/constants";
 import { useGetProductsQuery } from "@/redux/apiClient/productApi";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -69,6 +69,12 @@ const EditSaleDrawer = ({
       value: method,
     };
   });
+  const genderLabels = genderConst.map((gender) => {
+    return {
+      label: gender.toUpperCase(),
+      value: gender,
+    };
+  });
   const productsLabels = products?.data?.map((product: IProduct) => {
     return {
       label: product?.name,
@@ -80,6 +86,7 @@ const EditSaleDrawer = ({
     defaultValues: {
       customerName: "",
       customerPhone: "",
+      gender: "male",
       products: [{ product: "", salePrice: 0, unitAmount: 0, unit: "" }],
       totalAmount: 0,
       paymentMethod: "CASH",
@@ -96,6 +103,7 @@ const EditSaleDrawer = ({
       form.reset({
         customerName: sale?.data?.customerName,
         customerPhone: sale?.data?.customerPhone,
+        gender: sale?.data?.gender,
         products: sale?.data?.products.map((product: TProduct) => {
           return {
             product: product.product._id,
@@ -157,6 +165,29 @@ const EditSaleDrawer = ({
                 name="customerPhone"
                 label="Customer Phone"
                 placeholder="Customer Phone"
+              />
+              {/* gender input field-- */}
+              <FormField
+                control={form.control}
+                name={`gender`}
+                render={() => (
+                  <FormItem className="flex flex-col font-primary mt-2">
+                    <FormLabel>Gender</FormLabel>
+                    <Controller
+                      name={`gender`}
+                      control={form.control}
+                      render={({ field }) => (
+                        <SelectComboBox
+                          title="Gender"
+                          value={field.value}
+                          dataArr={genderLabels}
+                          onChange={(value) => field.onChange(value)}
+                        />
+                      )}
+                    />
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
             {/* products input field */}

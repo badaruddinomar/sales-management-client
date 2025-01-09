@@ -45,7 +45,7 @@ const SaleTable = ({
               return (
                 <TableHead
                   key={index}
-                  className="font-primary py-4 text-center font-semibold"
+                  className="font-primary py-4  font-semibold"
                 >
                   {item}
                 </TableHead>
@@ -57,25 +57,25 @@ const SaleTable = ({
           {sales?.map((sale: ISale) => {
             return (
               <TableRow key={sale?._id}>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium  py-3 max-w-[300px]">
                   {sale?.customerName}
                 </TableCell>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium py-3 max-w-[300px]">
                   {sale?.customerPhone}
                 </TableCell>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium py-3 max-w-[300px]">
                   {sale?.products?.length}
                 </TableCell>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium  py-3 max-w-[300px]">
                   {sale?.totalAmount}
                 </TableCell>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium  py-3 max-w-[300px]">
                   {sale?.paymentMethod}
                 </TableCell>
-                <TableCell className="font-medium text-center py-3 max-w-[300px]">
+                <TableCell className="font-medium py-3 max-w-[300px]">
                   {formatDate(sale?.saleDate)}
                 </TableCell>
-                <TableCell className="py-3 flex items-center justify-center  space-x-2">
+                <TableCell className="py-3 flex  space-x-2">
                   <Link
                     href={`/sales/${sale?._id}`}
                     className="bg-purple-200 transition-all duration-300 hover:bg-purple-300 px-2 py-1 rounded-md"
@@ -84,7 +84,7 @@ const SaleTable = ({
                   </Link>
                   <button
                     onClick={() => editSaleIdChangeHandler(sale?._id)}
-                    className="bg-blue-100 text-blue-500  py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"
+                    className="bg-blue-100 text-blue-500 py-1 rounded-md hover:bg-blue-200 trasition-all duration-300 px-2"
                   >
                     <MdOutlineModeEditOutline />
                   </button>

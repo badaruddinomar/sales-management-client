@@ -86,7 +86,6 @@ const SalesPage = () => {
           />
         </div>
       </div>
-
       {/* search input-- */}
       <div>
         <input

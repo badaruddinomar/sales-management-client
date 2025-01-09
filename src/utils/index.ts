@@ -11,7 +11,7 @@ export const checkNumber = (number: number) => {
 };
 export const formatedNumber = (number: number) => {
   if (number) {
-    return numeral(number).format("0a");
+    return numeral(number).format("0.0a");
   } else {
     return null;
   }

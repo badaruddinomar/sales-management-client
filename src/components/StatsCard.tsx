@@ -1,3 +1,4 @@
+import { formatedNumber } from "@/utils";
 import React from "react";
 import { IoIosTrendingUp } from "react-icons/io";
 import { IoTrendingDownOutline } from "react-icons/io5";
@@ -16,6 +17,12 @@ const StatsCard = ({
   percentage,
   selectedMonth,
 }: IProps) => {
+  const formateValueHandler = (value: number) => {
+    if (value > 100000) {
+      return formatedNumber(value);
+    }
+    return value;
+  };
   return (
     <div className="bg-[#FAFAFA] px-4 py-3 rounded-lg w-full shadow-md">
       <div className="flex items-center justify-between">
@@ -42,7 +49,7 @@ const StatsCard = ({
         )}
       </div>
       <p className="font-primary font-semibold text-[26px] sm:text-[32px] text-dark-primary my-3">
-        {value}
+        {formateValueHandler(value)}
       </p>
     </div>
   );

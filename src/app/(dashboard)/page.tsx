@@ -15,6 +15,18 @@ import {
 } from "@/components/ui/select";
 import { monthLabels } from "@/data";
 import { useState } from "react";
+import { useGetSalesQuery } from "@/redux/apiClient/salesApi";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { ISale } from "@/types";
+import Link from "next/link";
+import { GoEye } from "react-icons/go";
 
 const Home = () => {
   const [month, setMonth] = useState<{ label: string; value: string }>({
@@ -24,6 +36,7 @@ const Home = () => {
   const { data: stats, isLoading } = useGetStatsQuery({
     lastMonth: month.value,
   });
+  const { data: sales } = useGetSalesQuery({ limit: 5 });
   const handleMonthChange = (val: string) => {
     const selectedMonth = monthLabels.find((item) => item.value === val);
     if (selectedMonth) {
@@ -36,7 +49,7 @@ const Home = () => {
       <LoadingSpinner size={40} color="#000" borderWidth="5px" height="50vh" />
     );
   }
-
+  const tableHeading = ["Customer", "Product", "Total", "View"];
   return (
     <main className="py-6">
       <div className="flex items-center justify-between mb-6">
@@ -62,7 +75,6 @@ const Home = () => {
           </SelectContent>
         </Select>
       </div>
-
       {/* dashboard starts cards */}
       <div className="flex flex-wrap gap-4">
         {/* stats card-- */}
@@ -102,6 +114,54 @@ const Home = () => {
             selectedMonth={month}
           />
         </div>
+      </div>
+      {/* recent transaction-- */}
+      <h4 className="font-primary font-semibold text-[20px]  py-5">
+        Recent Transactions
+      </h4>
+      {/* products table-- */}
+      <div className="w-full overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
+        <Table className="font-primary min-w-[500px]">
+          <TableHeader className="bg-gray-light">
+            <TableRow>
+              {tableHeading.map((item, index) => {
+                return (
+                  <TableHead
+                    key={index}
+                    className="font-primary py-4 font-semibold"
+                  >
+                    {item}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {sales?.data?.map((sale: ISale) => {
+              return (
+                <TableRow key={sale?._id}>
+                  <TableCell className="font-medium  py-3 ">
+                    {sale?.customerName}{" "}
+                  </TableCell>
+                  <TableCell className="font-medium  py-3 ">
+                    {sale?.products?.length}
+                  </TableCell>
+                  <TableCell className="font-medium   py-3 ">
+                    {sale?.totalAmount}
+                  </TableCell>
+                  <TableCell className="font-medium flex  py-3 ">
+                    <Link
+                      href={`/sales/${sale?._id}`}
+                      className="bg-purple-200 transition-all duration-300 hover:bg-purple-300 px-2 py-1 rounded-md"
+                    >
+                      <GoEye className="text-purple-500" />
+                    </Link>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
       </div>
     </main>
   );

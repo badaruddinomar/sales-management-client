@@ -5,7 +5,10 @@ import { LiaSellsy } from "react-icons/lia";
 import { CiCoins1 } from "react-icons/ci";
 import { FiShoppingBag } from "react-icons/fi";
 import { IoNewspaperOutline } from "react-icons/io5";
-import { useGetStatsQuery } from "@/redux/apiClient/statsApi";
+import {
+  useGetPieChartDataQuery,
+  useGetStatsQuery,
+} from "@/redux/apiClient/statsApi";
 import {
   Select,
   SelectContent,
@@ -27,6 +30,7 @@ import {
 import { ISale } from "@/types";
 import Link from "next/link";
 import { GoEye } from "react-icons/go";
+import { PieChart } from "@/components/charts/PieChart";
 
 const Home = () => {
   const [month, setMonth] = useState<{ label: string; value: string }>({
@@ -37,6 +41,7 @@ const Home = () => {
     lastMonth: month.value,
   });
   const { data: sales } = useGetSalesQuery({ limit: 5 });
+  const { data: pieChartData } = useGetPieChartDataQuery({});
   const handleMonthChange = (val: string) => {
     const selectedMonth = monthLabels.find((item) => item.value === val);
     if (selectedMonth) {
@@ -120,48 +125,67 @@ const Home = () => {
         Recent Transactions
       </h4>
       {/* products table-- */}
-      <div className="w-full overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
-        <Table className="font-primary min-w-[500px]">
-          <TableHeader className="bg-gray-light">
-            <TableRow>
-              {tableHeading.map((item, index) => {
+      <div className="flex gap-5">
+        <div className="w-full sm:w-[calc(65%-20px)] flex-1 overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
+          <Table className="font-primary min-w-[500px]">
+            <TableHeader className="bg-gray-light">
+              <TableRow>
+                {tableHeading.map((item, index) => {
+                  return (
+                    <TableHead
+                      key={index}
+                      className="font-primary py-4 font-semibold"
+                    >
+                      {item}
+                    </TableHead>
+                  );
+                })}
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sales?.data?.map((sale: ISale) => {
                 return (
-                  <TableHead
-                    key={index}
-                    className="font-primary py-4 font-semibold"
-                  >
-                    {item}
-                  </TableHead>
+                  <TableRow key={sale?._id}>
+                    <TableCell className="font-medium  py-3 ">
+                      {sale?.customerName}{" "}
+                    </TableCell>
+                    <TableCell className="font-medium  py-3 ">
+                      {sale?.products?.length}
+                    </TableCell>
+                    <TableCell className="font-medium   py-3 ">
+                      {sale?.totalAmount}
+                    </TableCell>
+                    <TableCell className="font-medium flex  py-3 ">
+                      <Link
+                        href={`/sales/${sale?._id}`}
+                        className="bg-purple-200 transition-all duration-300 hover:bg-purple-300 px-2 py-1 rounded-md"
+                      >
+                        <GoEye className="text-purple-500" />
+                      </Link>
+                    </TableCell>
+                  </TableRow>
                 );
               })}
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {sales?.data?.map((sale: ISale) => {
-              return (
-                <TableRow key={sale?._id}>
-                  <TableCell className="font-medium  py-3 ">
-                    {sale?.customerName}{" "}
-                  </TableCell>
-                  <TableCell className="font-medium  py-3 ">
-                    {sale?.products?.length}
-                  </TableCell>
-                  <TableCell className="font-medium   py-3 ">
-                    {sale?.totalAmount}
-                  </TableCell>
-                  <TableCell className="font-medium flex  py-3 ">
-                    <Link
-                      href={`/sales/${sale?._id}`}
-                      className="bg-purple-200 transition-all duration-300 hover:bg-purple-300 px-2 py-1 rounded-md"
-                    >
-                      <GoEye className="text-purple-500" />
-                    </Link>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
+            </TableBody>
+          </Table>
+        </div>
+        {/* gender ratio pie charts-- */}
+        <div className="w-full sm:w-[calc(35%-20px)] flex  justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md h-[290px]">
+          <div className="max-h-[270px]  ">
+            <h4 className="font-primary font-semibold text-center text-[20px] ">
+              Gender Ratio
+            </h4>
+            <PieChart
+              labels={["Male", "Female"]}
+              data={[
+                pieChartData?.data?.genderRatio?.male,
+                pieChartData?.data?.genderRatio?.female,
+              ]}
+              backgroundColor={[`hsl(110,80%, 80%)`, `hsl(110,80%, 50%)`]}
+              offset={[0, 70]}
+            />
+          </div>
+        </div>
       </div>
     </main>
   );

@@ -18,7 +18,16 @@ export const statsApi = createApi({
       },
       providesTags: ["Stats"],
     }),
+    getPieChartData: builder.query({
+      query: () => {
+        return {
+          url: `/stats/pie`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Stats"],
+    }),
   }),
 });
 
-export const { useGetStatsQuery } = statsApi;
+export const { useGetStatsQuery, useGetPieChartDataQuery } = statsApi;

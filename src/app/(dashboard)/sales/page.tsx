@@ -14,6 +14,7 @@ import { LiaSellsy } from "react-icons/lia";
 import { CiCoins1 } from "react-icons/ci";
 import { IoNewspaperOutline } from "react-icons/io5";
 import { useGetStatsQuery } from "@/redux/apiClient/statsApi";
+import { GoPlus } from "react-icons/go";
 
 const SalesPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -49,7 +50,7 @@ const SalesPage = () => {
     <div className="py-6 w-full">
       {/* header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-primary font-semibold text-[26px] mb-6 flex items-center">
+        <h2 className="font-primary font-semibold text-[26px]  flex items-center">
           <span>Sales</span>
           <span className="text-base bg-gray-tertiary px-3 py-[2px] rounded-md ml-2">
             {formatedNumber(sales?.meta?.total)}
@@ -59,7 +60,8 @@ const SalesPage = () => {
           onClick={() => setAddDrawerOpen(true)}
           className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md font-primary cursor-pointer transition-all duration-300 "
         >
-          Create Sale
+          <GoPlus className="text-2xl block sm:hidden" />{" "}
+          <span className="sm:block hidden">Create Sale</span>
         </button>
       </div>
       <div className="flex flex-wrap gap-4 my-5">

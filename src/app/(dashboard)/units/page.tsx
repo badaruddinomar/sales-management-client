@@ -10,6 +10,7 @@ import NoItemFound from "@/components/reusable/NoItemFound";
 import PaginatedItems from "@/components/reusable/PaginatedItem";
 import { useGetUnitsQuery } from "@/redux/apiClient/unitApi";
 import { formatedNumber } from "@/utils";
+import { GoPlus } from "react-icons/go";
 
 const UnitsPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -47,7 +48,7 @@ const UnitsPage = () => {
     <div className="py-6 w-full">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-primary font-semibold text-[26px] mb-6 flex items-center">
+        <h2 className="font-primary font-semibold text-[26px] flex items-center">
           <span>Units</span>
           <span className="text-base bg-gray-tertiary px-3 py-[2px] rounded-md ml-2">
             {formatedNumber(units?.meta?.total)}
@@ -57,12 +58,13 @@ const UnitsPage = () => {
           onClick={() => toggleDialog("add", true)}
           className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md font-primary cursor-pointer transition-all duration-300"
         >
-          Add Unit
+          <GoPlus className="text-2xl block sm:hidden" />{" "}
+          <span className="sm:block hidden">Add Unit</span>
         </button>
       </div>
 
       {/* Search Input */}
-      <div>
+      <div className="mt-4">
         <input
           type="text"
           value={searchTerm}

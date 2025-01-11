@@ -31,13 +31,12 @@ interface LineChartProps {
   borderColor: string;
   labels?: string[];
 }
-const months = ["January", "February", "March", "April", "May", "June", "July"];
 export const LineChart = ({
   data,
   label,
   backgroundColor,
   borderColor,
-  labels = months,
+  labels,
 }: LineChartProps) => {
   const options: ChartOptions<"line"> = {
     responsive: true,

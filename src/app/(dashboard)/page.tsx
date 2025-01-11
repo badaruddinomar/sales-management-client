@@ -7,6 +7,7 @@ import { FiShoppingBag } from "react-icons/fi";
 import { IoNewspaperOutline } from "react-icons/io5";
 import {
   useGetPieChartDataQuery,
+  useGetReveneLineChartStatsQuery,
   useGetStatsQuery,
 } from "@/redux/apiClient/statsApi";
 import {
@@ -32,24 +33,29 @@ import Link from "next/link";
 import { GoEye } from "react-icons/go";
 import { PieChart } from "@/components/charts/PieChart";
 import { LineChart } from "@/components/charts/LineChart";
+import { rangeConst } from "@/constants";
 
 const Home = () => {
   const [month, setMonth] = useState<{ label: string; value: string }>({
     label: "Current Month",
     value: "0",
   });
+  const [range, setRange] = useState<string>(rangeConst[0].value);
   const { data: stats, isLoading } = useGetStatsQuery({
     lastMonth: month.value,
   });
   const { data: sales } = useGetSalesQuery({ limit: 5 });
   const { data: pieChartData } = useGetPieChartDataQuery({});
+  const { data: revenueChartData } = useGetReveneLineChartStatsQuery({ range });
   const handleMonthChange = (val: string) => {
     const selectedMonth = monthLabels.find((item) => item.value === val);
     if (selectedMonth) {
       setMonth(selectedMonth);
     }
   };
-
+  const handleRangeChange = (val: string) => {
+    setRange(val);
+  };
   if (isLoading) {
     return (
       <LoadingSpinner size={40} color="#000" borderWidth="5px" height="50vh" />
@@ -188,16 +194,40 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <h4 className="font-primary font-semibold text-[20px] py-5">Revenue</h4>
+
       {/* line chart -- */}
       <div className="flex flex-wrap gap-5">
         <div className="bg-[#FAFAFA] w-full sm:w-[calc(65%-20px)] flex-1 p-5 rounded-lg shadow-md">
+          <div className="flex items-center justify-between">
+            <h4 className="font-primary font-semibold text-[20px] py-5">
+              Revenue
+            </h4>
+            <Select value={range} onValueChange={handleRangeChange}>
+              <SelectTrigger className="w-[120px] sm:w-[180px] focus-visible:ring-0">
+                <SelectValue placeholder="Filter by Month" />
+              </SelectTrigger>
+              <SelectContent>
+                {rangeConst.map((item, ind) => {
+                  return (
+                    <SelectItem
+                      key={ind}
+                      value={item.value}
+                      className="capitalize font-primary"
+                    >
+                      {item.label}
+                    </SelectItem>
+                  );
+                })}
+              </SelectContent>
+            </Select>
+          </div>
+
           <LineChart
-            data={[12, 13, 15, 20, 25, 30, 20]}
+            data={revenueChartData?.data?.data}
             backgroundColor={"#F2F3F5"}
             borderColor={"#A957F7"}
             label="Revenue"
-            // labels={months}
+            labels={revenueChartData?.data?.labels}
           />
         </div>
         {/* gender ratio pie charts-- */}

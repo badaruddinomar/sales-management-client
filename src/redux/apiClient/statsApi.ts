@@ -21,8 +21,20 @@ export const statsApi = createApi({
     getPieChartData: builder.query({
       query: () => {
         return {
-          url: `/stats/pie`,
+          url: `/stats/pie-chart`,
           method: "GET",
+        };
+      },
+      providesTags: ["Stats"],
+    }),
+    getReveneLineChartStats: builder.query({
+      query: ({ range }) => {
+        const params = new URLSearchParams();
+        if (range) params.append("range", range);
+        return {
+          url: `/stats/line-chart`,
+          method: "GET",
+          params,
         };
       },
       providesTags: ["Stats"],
@@ -30,4 +42,8 @@ export const statsApi = createApi({
   }),
 });
 
-export const { useGetStatsQuery, useGetPieChartDataQuery } = statsApi;
+export const {
+  useGetStatsQuery,
+  useGetPieChartDataQuery,
+  useGetReveneLineChartStatsQuery,
+} = statsApi;

@@ -169,7 +169,7 @@ const Home = () => {
         </div>
         {/* gender ratio pie charts-- */}
         <div className="w-full lg:w-[calc(35%-20px)] flex  justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md h-[290px]">
-          <div className="max-h-[270px]  ">
+          <div className="max-h-[250px]  ">
             <h4 className="font-primary font-semibold text-center text-[20px] ">
               Gender Ratio
             </h4>

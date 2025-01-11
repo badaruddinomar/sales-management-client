@@ -31,6 +31,7 @@ import { ISale } from "@/types";
 import Link from "next/link";
 import { GoEye } from "react-icons/go";
 import { PieChart } from "@/components/charts/PieChart";
+import { LineChart } from "@/components/charts/LineChart";
 
 const Home = () => {
   const [month, setMonth] = useState<{ label: string; value: string }>({
@@ -125,7 +126,7 @@ const Home = () => {
         Recent Transactions
       </h4>
       {/* products table-- */}
-      <div className="flex gap-5">
+      <div className="flex flex-wrap gap-5">
         <div className="w-full sm:w-[calc(65%-20px)] flex-1 overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
           <Table className="font-primary min-w-[500px]">
             <TableHeader className="bg-gray-light">
@@ -182,6 +183,37 @@ const Home = () => {
                 pieChartData?.data?.genderRatio?.female,
               ]}
               backgroundColor={[`hsl(110,80%, 80%)`, `hsl(110,80%, 50%)`]}
+              offset={[0, 70]}
+            />
+          </div>
+        </div>
+      </div>
+      <h4 className="font-primary font-semibold text-[20px] py-5">Revenue</h4>
+      {/* line chart -- */}
+      <div className="flex flex-wrap gap-5">
+        <div className="bg-[#FAFAFA] w-full sm:w-[calc(65%-20px)] flex-1 p-5 rounded-lg shadow-md">
+          <LineChart
+            data={[12, 13, 15, 20, 25, 30, 20]}
+            backgroundColor={"#F2F3F5"}
+            borderColor={"#A957F7"}
+            label="Revenue"
+            // labels={months}
+          />
+        </div>
+        {/* gender ratio pie charts-- */}
+        <div className="w-full sm:w-[calc(35%-20px)] flex max-h-[auto] justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md ">
+          <div className="">
+            <h4 className="font-primary font-semibold text-center text-[20px] ">
+              Payment Ratio
+            </h4>
+            <PieChart
+              labels={["Cash", "Card", "Online"]}
+              data={[
+                pieChartData?.data?.paymentRatio?.cash,
+                pieChartData?.data?.paymentRatio?.card,
+                pieChartData?.data?.paymentRatio?.online,
+              ]}
+              backgroundColor={[`#79D7BE`, `#FDE7BB`, "#CB9DF0"]}
               offset={[0, 70]}
             />
           </div>

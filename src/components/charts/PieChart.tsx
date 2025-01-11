@@ -1,32 +1,14 @@
 import {
   Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
+  ArcElement,
   Tooltip,
   Legend,
   ChartData,
   ChartOptions,
-  ArcElement,
-  PointElement,
-  LineElement,
-  Filler,
 } from "chart.js";
 import { Pie } from "react-chartjs-2";
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-  Legend,
-  ArcElement,
-  PointElement,
-  LineElement,
-  Filler
-);
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface PieChartProps {
   labels: string[];

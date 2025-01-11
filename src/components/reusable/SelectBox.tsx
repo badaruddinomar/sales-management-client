@@ -33,7 +33,7 @@ const SelectBox: React.FC<SelectBoxProps> = ({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {options.map((item, index) => (
+        {options?.map((item, index) => (
           <SelectItem
             key={index}
             value={item.value as string}

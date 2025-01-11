@@ -10,19 +10,29 @@ import AddProductDrawer from "@/components/product/AddProductDrawer";
 import EditProductDrawer from "@/components/product/EditProductDrawer";
 import DeleteProductDialog from "@/components/product/DeleteProductDialog";
 import { GoPlus } from "react-icons/go";
+import SelectBox from "@/components/reusable/SelectBox";
+import { stockConstants } from "@/constants";
+import { useGetCategoriesQuery } from "@/redux/apiClient/categoryApi";
+import { ICategory } from "@/types";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [selectedProductId, setSelectedProductId] = useState<string>("");
+  const [stock, setStock] = useState<string>("");
+  const [category, setCategory] = useState<string>("");
 
   // API data fetching
-  const { data: products, isLoading } = useGetProductsQuery({
+  const { data: products, isLoading: isProductsLoading } = useGetProductsQuery({
     searchTerm,
     page: currentPage,
+    stock,
+    category,
     limit: 9,
   });
-
+  const { data: categories, isLoading: isCategoriesLoading } =
+    useGetCategoriesQuery({});
+  const isLoading = isProductsLoading || isCategoriesLoading;
   // Drawer and Dialog states
   const [addDrawerOpen, setAddDrawerOpen] = useState<boolean>(false);
   const [editDrawerOpen, setEditDrawerOpen] = useState<boolean>(false);
@@ -44,8 +54,24 @@ const ProductsPage = () => {
     if (action === "delete") setDeleteDialogOpen(true);
   };
 
+  const stockLabels = stockConstants.map((item) => {
+    return {
+      label: item.toUpperCase(),
+      value: item,
+    };
+  });
+  const categoriesLables = categories?.data?.map((category: ICategory) => {
+    return {
+      label: category.name,
+      value: category._id,
+    };
+  });
+
+  const handleStockChange = (val: string) => setStock(val);
+  const handleCategoryChange = (val: string) => setCategory(val);
+
   const showPagination =
-    products?.data !== undefined && products?.meta?.pages > 1;
+    products?.data.length !== 0 && products?.meta?.pages > 1;
 
   return (
     <div className="py-6 w-full">
@@ -67,14 +93,26 @@ const ProductsPage = () => {
       </div>
 
       {/* Search Input */}
-      <div className="mt-4">
+      <div className="mt-4 flex items-center sm:flex-row flex-col gap-2 justify-between">
         <input
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           placeholder="Search..."
-          className="px-4 py-2 border-b-[1px] focus:outline-none font-primary border-gray-tertiary"
+          className="px-4 py-2 border-b-[1px]  focus:outline-none font-primary border-gray-tertiary"
         />
+        <div className="flex space-x-2">
+          <SelectBox
+            options={stockLabels}
+            placeholder="Filter by Stock"
+            onChange={handleStockChange}
+          />
+          <SelectBox
+            options={categoriesLables}
+            placeholder="Filter by Category"
+            onChange={handleCategoryChange}
+          />
+        </div>
       </div>
 
       {/* Content */}

@@ -42,7 +42,7 @@ const UnitsPage = () => {
     toggleDialog("delete", true);
   };
 
-  const showPagination = units?.data && units?.meta?.pages > 1;
+  const showPagination = units?.data?.length !== 0 && units?.meta?.pages > 1;
 
   return (
     <div className="py-6 w-full">

@@ -45,7 +45,7 @@ const SalesPage = () => {
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
-  const showPagination = sales?.data !== undefined && sales?.meta?.pages > 1;
+  const showPagination = sales?.data?.length !== 0 && sales?.meta?.pages > 1;
   return (
     <div className="py-6 w-full">
       {/* header */}

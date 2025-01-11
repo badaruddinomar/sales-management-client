@@ -42,7 +42,8 @@ const CategoriesPage = () => {
     toggleDialog("delete", true);
   };
 
-  const showPagination = categories?.data && categories?.meta?.pages > 1;
+  const showPagination =
+    categories?.data?.length !== 0 && categories?.meta?.pages > 1;
 
   return (
     <div className="py-6 w-full">

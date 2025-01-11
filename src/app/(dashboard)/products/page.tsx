@@ -9,6 +9,7 @@ import PaginatedItems from "@/components/reusable/PaginatedItem";
 import AddProductDrawer from "@/components/product/AddProductDrawer";
 import EditProductDrawer from "@/components/product/EditProductDrawer";
 import DeleteProductDialog from "@/components/product/DeleteProductDialog";
+import { GoPlus } from "react-icons/go";
 
 const ProductsPage = () => {
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -50,7 +51,7 @@ const ProductsPage = () => {
     <div className="py-6 w-full">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-primary font-semibold text-[26px] mb-6 flex items-center">
+        <h2 className="font-primary font-semibold text-[26px]  flex items-center">
           <span>Products</span>
           <span className="text-base bg-gray-tertiary px-3 py-[2px] rounded-md ml-2">
             {formatedNumber(products?.meta?.total)}
@@ -60,12 +61,13 @@ const ProductsPage = () => {
           onClick={() => toggleDrawer("add", true)}
           className="bg-blue-500 hover:bg-blue-400 text-white px-4 py-2 rounded-md font-primary cursor-pointer transition-all duration-300"
         >
-          Add Product
+          <GoPlus className="text-2xl block sm:hidden" />{" "}
+          <span className="sm:block hidden">Add Product</span>
         </button>
       </div>
 
       {/* Search Input */}
-      <div>
+      <div className="mt-4">
         <input
           type="text"
           value={searchTerm}

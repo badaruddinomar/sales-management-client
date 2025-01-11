@@ -50,7 +50,7 @@ const SalesPage = () => {
     <div className="py-6 w-full">
       {/* header */}
       <div className="flex items-center justify-between">
-        <h2 className="font-primary font-semibold text-[26px]  flex items-center">
+        <h2 className="font-primary font-semibold text-[20px] sm:text-[26px]  flex items-center">
           <span>Sales</span>
           <span className="text-base bg-gray-tertiary px-3 py-[2px] rounded-md ml-2">
             {formatedNumber(sales?.meta?.total)}

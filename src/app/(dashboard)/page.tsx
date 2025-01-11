@@ -10,13 +10,6 @@ import {
   useGetReveneLineChartStatsQuery,
   useGetStatsQuery,
 } from "@/redux/apiClient/statsApi";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { monthLabels } from "@/data";
 import { useState } from "react";
 import { useGetSalesQuery } from "@/redux/apiClient/salesApi";
@@ -34,6 +27,7 @@ import { GoEye } from "react-icons/go";
 import { PieChart } from "@/components/charts/PieChart";
 import { LineChart } from "@/components/charts/LineChart";
 import { rangeConst } from "@/constants";
+import SelectBox from "@/components/reusable/SelectBox";
 
 const Home = () => {
   const [month, setMonth] = useState<{ label: string; value: string }>({
@@ -41,12 +35,22 @@ const Home = () => {
     value: "0",
   });
   const [range, setRange] = useState<string>(rangeConst[0].value);
-  const { data: stats, isLoading } = useGetStatsQuery({
+  const { data: stats, isLoading: isStatsLoading } = useGetStatsQuery({
     lastMonth: month.value,
   });
-  const { data: sales } = useGetSalesQuery({ limit: 5 });
-  const { data: pieChartData } = useGetPieChartDataQuery({});
-  const { data: revenueChartData } = useGetReveneLineChartStatsQuery({ range });
+  const { data: sales, isLoading: isSalesLoading } = useGetSalesQuery({
+    limit: 5,
+  });
+  const { data: pieChartData, isLoading: isPieChartDataLoading } =
+    useGetPieChartDataQuery({});
+  const { data: revenueChartData, isLoading: isRevenueChartDataLoading } =
+    useGetReveneLineChartStatsQuery({ range });
+
+  const isLoading =
+    isStatsLoading ||
+    isSalesLoading ||
+    isPieChartDataLoading ||
+    isRevenueChartDataLoading;
   const handleMonthChange = (val: string) => {
     const selectedMonth = monthLabels.find((item) => item.value === val);
     if (selectedMonth) {
@@ -68,29 +72,16 @@ const Home = () => {
         <h2 className="font-primary font-semibold text-[26px] sm:text-[32px]">
           Dashboard
         </h2>
-        <Select onValueChange={handleMonthChange}>
-          <SelectTrigger className="w-[120px] sm:w-[180px] focus-visible:ring-0">
-            <SelectValue placeholder="Filter by Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {monthLabels.map((item, ind) => {
-              return (
-                <SelectItem
-                  key={ind}
-                  value={item.value}
-                  className="capitalize font-primary"
-                >
-                  {item.label}
-                </SelectItem>
-              );
-            })}
-          </SelectContent>
-        </Select>
+        <SelectBox
+          options={monthLabels}
+          placeholder="Filter by Month"
+          onChange={handleMonthChange}
+        />
       </div>
       {/* dashboard starts cards */}
       <div className="flex flex-wrap gap-4">
         {/* stats card-- */}
-        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+        <div className="w-full md:w-[calc(50%-16px)] xl:w-[calc(25%-16px)]">
           <StatsCard
             title={"Total Sales"}
             value={stats?.data?.sales?.total}
@@ -99,7 +90,7 @@ const Home = () => {
             selectedMonth={month}
           />
         </div>
-        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+        <div className="w-full md:w-[calc(50%-16px)] xl:w-[calc(25%-16px)]">
           <StatsCard
             title={"Total Revenue"}
             value={stats?.data?.revenue?.total}
@@ -108,7 +99,7 @@ const Home = () => {
             selectedMonth={month}
           />
         </div>
-        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+        <div className="w-full md:w-[calc(50%-16px)] xl:w-[calc(25%-16px)]">
           <StatsCard
             title={"Total Products"}
             value={stats?.data?.products?.total}
@@ -117,7 +108,7 @@ const Home = () => {
             selectedMonth={month}
           />
         </div>
-        <div className="w-full sm:w-[calc(50%-16px)] lg:w-[calc(25%-16px)]">
+        <div className="w-full md:w-[calc(50%-16px)] xl:w-[calc(25%-16px)]">
           <StatsCard
             title={"Total Transactions"}
             value={stats?.data?.transactions?.total}
@@ -128,12 +119,12 @@ const Home = () => {
         </div>
       </div>
       {/* recent transaction-- */}
-      <h4 className="font-primary font-semibold text-[20px]  py-5">
+      <h4 className="font-primary font-semibold text-[20px] py-5">
         Recent Transactions
       </h4>
       {/* products table-- */}
-      <div className="flex flex-wrap gap-5">
-        <div className="w-full sm:w-[calc(65%-20px)] flex-1 overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
+      <div className="flex flex-wrap mb-5 lg:mb-0 gap-5">
+        <div className="w-full lg:w-[calc(65%-20px)] flex-1 overflow-x-auto mb-5 border-[1px] border-[#eee] rounded-lg">
           <Table className="font-primary min-w-[500px]">
             <TableHeader className="bg-gray-light">
               <TableRow>
@@ -177,7 +168,7 @@ const Home = () => {
           </Table>
         </div>
         {/* gender ratio pie charts-- */}
-        <div className="w-full sm:w-[calc(35%-20px)] flex  justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md h-[290px]">
+        <div className="w-full lg:w-[calc(35%-20px)] flex  justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md h-[290px]">
           <div className="max-h-[270px]  ">
             <h4 className="font-primary font-semibold text-center text-[20px] ">
               Gender Ratio
@@ -196,30 +187,17 @@ const Home = () => {
       </div>
 
       {/* line chart -- */}
-      <div className="flex flex-wrap gap-5">
-        <div className="bg-[#FAFAFA] w-full sm:w-[calc(65%-20px)] flex-1 p-5 rounded-lg shadow-md">
+      <div className="flex flex-wrap  gap-5">
+        <div className="bg-[#FAFAFA] w-full lg:w-[calc(65%-20px)] flex-1 p-5 rounded-lg shadow-md">
           <div className="flex items-center justify-between">
             <h4 className="font-primary font-semibold text-[20px] py-5">
               Revenue
             </h4>
-            <Select value={range} onValueChange={handleRangeChange}>
-              <SelectTrigger className="w-[120px] sm:w-[180px] focus-visible:ring-0">
-                <SelectValue placeholder="Filter by Month" />
-              </SelectTrigger>
-              <SelectContent>
-                {rangeConst.map((item, ind) => {
-                  return (
-                    <SelectItem
-                      key={ind}
-                      value={item.value}
-                      className="capitalize font-primary"
-                    >
-                      {item.label}
-                    </SelectItem>
-                  );
-                })}
-              </SelectContent>
-            </Select>
+            <SelectBox
+              options={rangeConst}
+              placeholder="Filter by range"
+              onChange={handleRangeChange}
+            />
           </div>
 
           <LineChart
@@ -231,9 +209,9 @@ const Home = () => {
           />
         </div>
         {/* gender ratio pie charts-- */}
-        <div className="w-full sm:w-[calc(35%-20px)] flex max-h-[auto] justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md ">
-          <div className="">
-            <h4 className="font-primary font-semibold text-center text-[20px] ">
+        <div className="w-full lg:w-[calc(35%-20px)] flex max-h-[auto] justify-center items-center  rounded-lg bg-[#FAFAFA] shadow-md ">
+          <div className="flex flex-col items-center justify-center">
+            <h4 className="font-primary font-semibold text-center my-5 text-[20px] ">
               Payment Ratio
             </h4>
             <PieChart
@@ -244,7 +222,7 @@ const Home = () => {
                 pieChartData?.data?.paymentRatio?.online,
               ]}
               backgroundColor={[`#79D7BE`, `#FDE7BB`, "#CB9DF0"]}
-              offset={[0, 70]}
+              offset={[0, 70, 0]}
             />
           </div>
         </div>

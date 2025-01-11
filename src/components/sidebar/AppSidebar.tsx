@@ -25,6 +25,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const [logout, { isLoading }] = useLogoutMutation();
   const router = useRouter();
   const dispatch = useAppDispatch();
+
   const logoutHandler = async () => {
     try {
       await logout({}).unwrap();
@@ -76,7 +77,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
             />
           ) : (
             <>
-              <CiLogout /> <span>Logout</span>
+              {isSidebarOpen ? (
+                <>
+                  <CiLogout /> <span>Logout</span>
+                </>
+              ) : (
+                <CiLogout />
+              )}
             </>
           )}
         </button>
